@@ -1,0 +1,574 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-11-03T00:00:00Z",
+  "title": "Design System: NeedPainkiller",
+  "extensions": {
+    "colorMeta": {
+      "cobalt": {
+        "role": "primary",
+        "displayName": "Reader's Cobalt",
+        "canonical": "#2851c6",
+        "cssVar": "--accent",
+        "theme": "light",
+        "tonalRamp": [
+          "#101f4d",
+          "#16296a",
+          "#1d3a92",
+          "#2851c6",
+          "#5376d6",
+          "#8aa2e4",
+          "#c3d0f2",
+          "#edf1fd"
+        ]
+      },
+      "periwinkle": {
+        "role": "primary",
+        "displayName": "Reader's Cobalt (dark)",
+        "canonical": "#8fa9ff",
+        "cssVar": "--accent",
+        "theme": "dark",
+        "tonalRamp": [
+          "#1e2640",
+          "#2b3a6b",
+          "#3d5299",
+          "#5674cc",
+          "#7390f0",
+          "#8fa9ff",
+          "#b8c8ff",
+          "#e3e9ff"
+        ]
+      },
+      "cobalt-ink": {
+        "role": "primary",
+        "displayName": "On Cobalt",
+        "canonical": "#ffffff",
+        "cssVar": "--accent-ink",
+        "theme": "light"
+      },
+      "periwinkle-ink": {
+        "role": "primary",
+        "displayName": "On Periwinkle",
+        "canonical": "#0d1020",
+        "cssVar": "--accent-ink",
+        "theme": "dark"
+      },
+      "cobalt-wash": {
+        "role": "primary",
+        "displayName": "Cobalt Wash",
+        "canonical": "#edf1fd",
+        "cssVar": "--accent-soft",
+        "theme": "light"
+      },
+      "periwinkle-wash": {
+        "role": "primary",
+        "displayName": "Periwinkle Wash",
+        "canonical": "#1e2640",
+        "cssVar": "--accent-soft",
+        "theme": "dark"
+      },
+      "marker-yellow": {
+        "role": "secondary",
+        "displayName": "Marker Yellow",
+        "canonical": "#fdeca2",
+        "cssVar": "--mark",
+        "theme": "light",
+        "tonalRamp": [
+          "#3d3209",
+          "#5c4c12",
+          "#86701c",
+          "#b39628",
+          "#d9b93a",
+          "#f2d66a",
+          "#fdeca2",
+          "#fef8dc"
+        ]
+      },
+      "marker-ochre": {
+        "role": "secondary",
+        "displayName": "Marker Ochre",
+        "canonical": "#5c4c12",
+        "cssVar": "--mark",
+        "theme": "dark"
+      },
+      "paper": {
+        "role": "neutral",
+        "displayName": "Paper",
+        "canonical": "#ffffff",
+        "cssVar": "--bg",
+        "theme": "light"
+      },
+      "paper-subtle": {
+        "role": "neutral",
+        "displayName": "Paper Subtle",
+        "canonical": "#f5f6f8",
+        "cssVar": "--bg-subtle",
+        "theme": "light"
+      },
+      "paper-raised": {
+        "role": "neutral",
+        "displayName": "Paper Raised",
+        "canonical": "#ffffff",
+        "cssVar": "--bg-raised",
+        "theme": "light"
+      },
+      "slate-heading": {
+        "role": "neutral",
+        "displayName": "Slate Heading",
+        "canonical": "#161d26",
+        "cssVar": "--heading",
+        "theme": "light",
+        "tonalRamp": [
+          "#161d26",
+          "#212b36",
+          "#3a4450",
+          "#56606b",
+          "#67707b",
+          "#9aa1a9",
+          "#d4d8dd",
+          "#f5f6f8"
+        ]
+      },
+      "slate-ink": {
+        "role": "neutral",
+        "displayName": "Slate Ink",
+        "canonical": "#212b36",
+        "cssVar": "--ink",
+        "theme": "light"
+      },
+      "slate-muted": {
+        "role": "neutral",
+        "displayName": "Slate Muted",
+        "canonical": "#56606b",
+        "cssVar": "--ink-muted",
+        "theme": "light"
+      },
+      "slate-faint": {
+        "role": "neutral",
+        "displayName": "Slate Faint",
+        "canonical": "#67707b",
+        "cssVar": "--ink-faint",
+        "theme": "light"
+      },
+      "hairline": {
+        "role": "neutral",
+        "displayName": "Hairline",
+        "canonical": "#e7e9ec",
+        "cssVar": "--rule",
+        "theme": "light"
+      },
+      "hairline-strong": {
+        "role": "neutral",
+        "displayName": "Hairline Strong",
+        "canonical": "#d4d8dd",
+        "cssVar": "--rule-strong",
+        "theme": "light"
+      },
+      "code-paper": {
+        "role": "neutral",
+        "displayName": "Code Paper",
+        "canonical": "#ffffff",
+        "cssVar": "--code-bg",
+        "theme": "light"
+      },
+      "code-line-tint": {
+        "role": "neutral",
+        "displayName": "Highlighted Line",
+        "canonical": "#eef2fc",
+        "cssVar": "--code-line-hl",
+        "theme": "light"
+      },
+      "diff-add-tint": {
+        "role": "neutral",
+        "displayName": "Diff Added",
+        "canonical": "#e8f6ed",
+        "cssVar": "--diff-add",
+        "theme": "light"
+      },
+      "diff-del-tint": {
+        "role": "neutral",
+        "displayName": "Diff Removed",
+        "canonical": "#fcecec",
+        "cssVar": "--diff-del",
+        "theme": "light"
+      },
+      "graphite": {
+        "role": "neutral",
+        "displayName": "Graphite",
+        "canonical": "#15171a",
+        "cssVar": "--bg",
+        "theme": "dark",
+        "tonalRamp": [
+          "#15171a",
+          "#1c1f23",
+          "#2a2e33",
+          "#3a3f46",
+          "#949ca6",
+          "#a9b1bb",
+          "#dfe3e8",
+          "#f2f4f6"
+        ]
+      },
+      "graphite-subtle": {
+        "role": "neutral",
+        "displayName": "Graphite Subtle",
+        "canonical": "#1c1f23",
+        "cssVar": "--bg-subtle",
+        "theme": "dark"
+      },
+      "graphite-raised": {
+        "role": "neutral",
+        "displayName": "Graphite Raised",
+        "canonical": "#1f2226",
+        "cssVar": "--bg-raised",
+        "theme": "dark"
+      },
+      "graphite-ink": {
+        "role": "neutral",
+        "displayName": "Graphite Ink",
+        "canonical": "#dfe3e8",
+        "cssVar": "--ink",
+        "theme": "dark"
+      },
+      "graphite-heading": {
+        "role": "neutral",
+        "displayName": "Graphite Heading",
+        "canonical": "#f2f4f6",
+        "cssVar": "--heading",
+        "theme": "dark"
+      },
+      "graphite-muted": {
+        "role": "neutral",
+        "displayName": "Graphite Muted",
+        "canonical": "#a9b1bb",
+        "cssVar": "--ink-muted",
+        "theme": "dark"
+      },
+      "graphite-faint": {
+        "role": "neutral",
+        "displayName": "Graphite Faint",
+        "canonical": "#949ca6",
+        "cssVar": "--ink-faint",
+        "theme": "dark"
+      },
+      "graphite-hairline": {
+        "role": "neutral",
+        "displayName": "Graphite Hairline",
+        "canonical": "#2a2e33",
+        "cssVar": "--rule",
+        "theme": "dark"
+      },
+      "graphite-hairline-strong": {
+        "role": "neutral",
+        "displayName": "Graphite Hairline Strong",
+        "canonical": "#3a3f46",
+        "cssVar": "--rule-strong",
+        "theme": "dark"
+      },
+      "graphite-code-paper": {
+        "role": "neutral",
+        "displayName": "Graphite Code Paper",
+        "canonical": "#181b1f",
+        "cssVar": "--code-bg",
+        "theme": "dark"
+      },
+      "graphite-code-line-tint": {
+        "role": "neutral",
+        "displayName": "Graphite Highlighted Line",
+        "canonical": "#212a3e",
+        "cssVar": "--code-line-hl",
+        "theme": "dark"
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "Post and page titles; 27px under 640px."
+      },
+      "display-mobile": {
+        "displayName": "Display (mobile)",
+        "purpose": "Post and page titles under 640px."
+      },
+      "statement": {
+        "displayName": "Home Statement",
+        "purpose": "The single intro statement on the home page, max 22em."
+      },
+      "statement-mobile": {
+        "displayName": "Home Statement (mobile)",
+        "purpose": "Home statement under 640px."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Prose h2; 21px on mobile."
+      },
+      "headline-mobile": {
+        "displayName": "Headline (mobile)",
+        "purpose": "Prose h2 under 640px."
+      },
+      "subhead": {
+        "displayName": "Subhead",
+        "purpose": "Prose h3."
+      },
+      "subhead-mobile": {
+        "displayName": "Subhead (mobile)",
+        "purpose": "Prose h3 under 640px."
+      },
+      "wordmark": {
+        "displayName": "Wordmark",
+        "purpose": "Site name in the header."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "Post-list and timeline item titles."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Post prose in the 715px (KO) / 660px (EN) column; 16px / 1.75 on mobile."
+      },
+      "ui": {
+        "displayName": "UI",
+        "purpose": "Base body text outside prose."
+      },
+      "secondary": {
+        "displayName": "Secondary",
+        "purpose": "Descriptions, header nav links, search result titles, contents sheet items, tables, résumé role line."
+      },
+      "label": {
+        "displayName": "Section Heading",
+        "purpose": "Uppercase index section headings and the contents title; 0.04em tracking in Korean. Always the heading itself, never a kicker above another heading."
+      },
+      "label-small": {
+        "displayName": "Small Label",
+        "purpose": "Contents title (uppercase) and the search dialog footer hint."
+      },
+      "meta": {
+        "displayName": "Meta",
+        "purpose": "Meta lines, counts, footer and captions in slate faint."
+      },
+      "mono": {
+        "displayName": "Mono",
+        "purpose": "Dates, years, counts and keyboard hints. All-mono body only on the English Résumé page."
+      },
+      "kbd": {
+        "displayName": "Keyboard Hint",
+        "purpose": "Mono keyboard hint chips such as the search shortcut and Esc."
+      },
+      "code": {
+        "displayName": "Code",
+        "purpose": "Code frames; 13px on mobile."
+      },
+      "resume-name": {
+        "displayName": "Résumé Name",
+        "purpose": "Mono name on the standalone Résumé page (Résumé Exception)."
+      },
+      "resume-name-mobile": {
+        "displayName": "Résumé Name (mobile)",
+        "purpose": "Résumé name under 640px."
+      }
+    },
+    "shadows": [
+      {
+        "name": "dialog-lift",
+        "cssVar": "--shadow-dialog",
+        "value": "0 24px 48px -16px rgb(22 29 38 / 0.28), 0 2px 6px rgb(22 29 38 / 0.08)",
+        "darkValue": "0 24px 48px -16px rgb(0 0 0 / 0.6), 0 2px 6px rgb(0 0 0 / 0.3)",
+        "purpose": "The search dialog only. Nothing else in the system casts a shadow."
+      }
+    ],
+    "motion": [
+      {
+        "name": "ease-out",
+        "cssVar": "--ease-out",
+        "value": "cubic-bezier(0.16, 1, 0.3, 1)",
+        "purpose": "Search dialog and scrim entrance, 220ms; the dialog rises 10px from scale 0.985."
+      },
+      {
+        "name": "state-change",
+        "value": "120ms ease-out",
+        "purpose": "Colour, border and background changes on hover."
+      },
+      {
+        "name": "reduced-motion",
+        "value": "0.01ms",
+        "purpose": "All animation and transition durations collapse under prefers-reduced-motion."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "mobile",
+        "value": "640px",
+        "purpose": "Type steps down, code frames bleed, dates move under titles."
+      },
+      {
+        "name": "compact-header",
+        "value": "760px",
+        "purpose": "Nav moves to a menu popover; search becomes an icon button."
+      },
+      {
+        "name": "rail",
+        "value": "1260px",
+        "purpose": "Sticky contents rail appears at and above this width; below it a contents pill opens a sheet."
+      }
+    ],
+    "focus": {
+      "value": "outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 4px",
+      "purpose": "Every focusable element."
+    },
+    "icons": {
+      "set": "Lucide outline (stroke 1.75) plus Simple Icons GitHub mark",
+      "defaultSize": "18px",
+      "color": "currentColor",
+      "delivery": "inline SVG"
+    },
+    "roundedMeta": {
+      "hairline": "Marks in prose and search excerpts.",
+      "focus": "Focus rings and keyboard hint chips.",
+      "inline": "Inline code and keyboard keys.",
+      "small": "Post-list thumbnails and the code copy button.",
+      "control": "Controls, code frames, blockquotes, images, search results.",
+      "media": "The post thumbnail.",
+      "surface": "Search dialog and mobile menu.",
+      "sheet": "Mobile contents sheet.",
+      "pill": "Topic filters, contents pill, scrollbar thumbs."
+    }
+  },
+  "components": [
+    {
+      "name": "Search Trigger",
+      "kind": "input",
+      "refersTo": "search-trigger",
+      "description": "Header field that opens the search dialog; shows the keyboard shortcut.",
+      "html": "<button class=\"ds-search-trigger\" type=\"button\"><svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.75\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><circle cx=\"11\" cy=\"11\" r=\"8\"/><path d=\"m21 21-4.3-4.3\"/></svg><span>Search</span><kbd class=\"ds-search-trigger__kbd\">⌘K</kbd></button>",
+      "css": ".ds-search-trigger { display: inline-flex; align-items: center; gap: 8px; height: 34px; min-width: 136px; padding: 0 6px 0 10px; border: 1px solid var(--rule-strong); border-radius: var(--radius); background: var(--bg); color: var(--ink-faint); font-family: var(--font-sans); font-size: 14px; cursor: pointer; transition: border-color 120ms ease-out, color 120ms ease-out; } .ds-search-trigger:hover { border-color: var(--ink-faint); color: var(--ink-muted); } .ds-search-trigger:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; } .ds-search-trigger__kbd { margin-left: auto; padding: 1px 5px; border: 1px solid var(--rule); border-radius: 4px; background: var(--bg-subtle); color: var(--ink-muted); font-family: var(--font-mono); font-size: 11.5px; line-height: 1.5; }"
+    },
+    {
+      "name": "Tool Button",
+      "kind": "button",
+      "refersTo": "tool-button",
+      "description": "Transparent 34px icon or language button in the header and footer.",
+      "html": "<button class=\"ds-tool-btn\" type=\"button\" aria-label=\"Toggle theme\"><svg width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.75\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z\"/></svg></button><button class=\"ds-tool-btn\" type=\"button\">EN</button>",
+      "css": ".ds-tool-btn { display: inline-flex; align-items: center; justify-content: center; min-width: 34px; height: 34px; padding: 0 6px; border: 0; border-radius: var(--radius); background: transparent; color: var(--ink-muted); font-family: var(--font-sans); font-size: 13px; font-weight: 600; letter-spacing: 0.02em; cursor: pointer; transition: background-color 120ms ease-out, color 120ms ease-out; } .ds-tool-btn:hover { background: var(--bg-subtle); color: var(--heading); } .ds-tool-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }"
+    },
+    {
+      "name": "Header Navigation",
+      "kind": "nav",
+      "refersTo": "site-nav",
+      "description": "Wordmark plus quiet text links; current page in heading colour at 600.",
+      "html": "<nav class=\"ds-nav\"><a class=\"ds-nav__mark\" href=\"#\">NeedPainkiller</a><ul><li><a href=\"#\" aria-current=\"page\">Posts</a></li><li><a href=\"#\">Timeline</a></li><li><a href=\"#\">About</a></li><li><a href=\"#\">Résumé</a></li></ul></nav>",
+      "css": ".ds-nav { display: flex; align-items: center; gap: 28px; font-family: var(--font-sans); } .ds-nav__mark { font-size: 19px; font-weight: 700; letter-spacing: -0.02em; color: var(--heading); text-decoration: none; } .ds-nav ul { display: flex; gap: 22px; margin: 0 0 0 auto; padding: 0; list-style: none; } .ds-nav ul a { display: inline-block; padding: 6px 0; font-size: 15px; color: var(--ink-muted); text-decoration: none; transition: color 120ms ease-out; } .ds-nav ul a:hover, .ds-nav ul a[aria-current='page'] { color: var(--heading); } .ds-nav ul a[aria-current='page'] { font-weight: 600; } .ds-nav a:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 4px; }"
+    },
+    {
+      "name": "Topic Filter",
+      "kind": "chip",
+      "refersTo": "topic-filter",
+      "description": "Archive topic filters: outlined pills with a filled active state.",
+      "html": "<ul class=\"ds-filter\"><li><a href=\"#\" aria-current=\"page\">All <span class=\"ds-filter__num\">12</span></a></li><li><a href=\"#\">backend <span class=\"ds-filter__num\">5</span></a></li><li><a href=\"#\">frontend <span class=\"ds-filter__num\">3</span></a></li></ul>",
+      "css": ".ds-filter { display: flex; flex-wrap: wrap; gap: 8px; margin: 0; padding: 0; list-style: none; font-family: var(--font-sans); } .ds-filter a { display: inline-flex; align-items: center; gap: 6px; height: 32px; padding: 0 12px; border: 1px solid var(--rule-strong); border-radius: 999px; font-size: 14px; color: var(--ink-muted); text-decoration: none; transition: border-color 120ms ease-out, color 120ms ease-out; } .ds-filter a:hover { border-color: var(--ink-faint); color: var(--heading); } .ds-filter a[aria-current='page'] { border-color: var(--heading); background: var(--heading); color: var(--bg); } .ds-filter a:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; } .ds-filter__num { font-size: 12.5px; opacity: 0.8; font-variant-numeric: tabular-nums; }"
+    },
+    {
+      "name": "Post Row",
+      "kind": "custom",
+      "refersTo": "post-list",
+      "description": "Hairline-separated list row: mono date, title, two-line description; whole row is the link, title turns cobalt on hover.",
+      "html": "<ul class=\"ds-posts\"><li class=\"ds-row\"><time class=\"ds-row__date\">2026-11-03</time><div><h3 class=\"ds-row__title\"><a href=\"#\">When the HikariCP pool runs dry</a></h3><p class=\"ds-row__desc\">A five-second stall every thirty minutes, traced through thread dumps to a transaction boundary.</p></div></li></ul>",
+      "css": ".ds-posts { margin: 0; padding: 0; list-style: none; border-top: 1px solid var(--rule); font-family: var(--font-sans); } .ds-row { position: relative; display: grid; grid-template-columns: 104px minmax(0, 1fr); gap: 6px 24px; padding: 22px 0; border-bottom: 1px solid var(--rule); } .ds-row__date { padding-top: 3px; font-family: var(--font-mono); font-size: 13px; color: var(--ink-faint); font-variant-numeric: tabular-nums; } .ds-row__title { margin: 0; font-size: 17px; font-weight: 600; line-height: 1.45; letter-spacing: -0.01em; } .ds-row__title a { color: var(--heading); text-decoration: none; transition: color 120ms ease-out; } .ds-row__title a::after { content: ''; position: absolute; inset: 0; } .ds-row:hover .ds-row__title a { color: var(--accent); } .ds-row__title a:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; } .ds-row__desc { margin: 6px 0 0; font-size: 15px; line-height: 1.6; color: var(--ink-muted); }"
+    },
+    {
+      "name": "Code Frame",
+      "kind": "custom",
+      "refersTo": "code-frame",
+      "description": "Hairline-ruled code block with file name, language, copy button, line numbers and a highlighted line.",
+      "html": "<figure class=\"ds-code\"><figcaption class=\"ds-code__cap\"><span class=\"ds-code__title\">application.yml</span><span class=\"ds-code__lang\">yaml</span><button class=\"ds-code__copy\" type=\"button\"><svg width=\"14\" height=\"14\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.75\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><rect width=\"14\" height=\"14\" x=\"8\" y=\"8\" rx=\"2\"/><path d=\"M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2\"/></svg>Copy</button></figcaption><pre><code><span class=\"ds-line\">spring:</span><span class=\"ds-line\">  datasource:</span><span class=\"ds-line ds-line--hl\">    connection-timeout: 3000</span></code></pre></figure>",
+      "css": ".ds-code { margin: 0; border: 1px solid var(--rule-strong); border-radius: var(--radius); background: var(--code-bg); overflow: hidden; } .ds-code__cap { display: flex; align-items: center; gap: 12px; min-height: 38px; padding: 0 8px 0 14px; border-bottom: 1px solid var(--rule); font-family: var(--font-mono); font-size: 12.5px; color: var(--ink-muted); } .ds-code__title { color: var(--heading); font-weight: 500; } .ds-code__lang { margin-left: auto; color: var(--ink-faint); } .ds-code__copy { display: inline-flex; align-items: center; gap: 6px; height: 28px; padding: 0 8px; border: 0; border-radius: 6px; background: transparent; color: var(--ink-muted); font-family: var(--font-sans); font-size: 12.5px; cursor: pointer; transition: background-color 120ms ease-out, color 120ms ease-out; } .ds-code__copy:hover { background: var(--bg-subtle); color: var(--heading); } .ds-code__copy:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; } .ds-code pre { margin: 0; padding: 14px 0; font-family: var(--font-mono); font-size: 14px; line-height: 1.7; overflow-x: auto; } .ds-code code { display: block; counter-reset: line; } .ds-line { display: block; padding: 0 18px 0 16px; color: var(--ink); white-space: pre; } .ds-line::before { counter-increment: line; content: counter(line); display: inline-block; width: 2.5ch; margin-right: 18px; text-align: right; color: var(--ink-faint); } .ds-line--hl { background: var(--code-line-hl); }"
+    },
+    {
+      "name": "Search Dialog",
+      "kind": "custom",
+      "refersTo": "search-dialog",
+      "description": "The only shadowed surface: raised panel with a borderless input and result rows.",
+      "html": "<div class=\"ds-search\"><div class=\"ds-search__bar\"><input class=\"ds-search__input\" type=\"search\" placeholder=\"Search posts\" value=\"pool\"><kbd class=\"ds-search__kbd\">Esc</kbd></div><ul class=\"ds-search__results\"><li><a class=\"ds-search__result\" href=\"#\"><span class=\"ds-search__title\">When the HikariCP pool runs dry</span><span class=\"ds-search__excerpt\">The connection <mark>pool</mark> hit twenty pending requests.</span></a></li></ul></div>",
+      "css": ".ds-search { width: min(600px, 100%); border: 1px solid var(--rule-strong); border-radius: 12px; background: var(--bg-raised); color: var(--ink); box-shadow: var(--shadow-dialog); overflow: hidden; font-family: var(--font-sans); } .ds-search__bar { display: flex; align-items: center; gap: 12px; padding: 0 12px 0 18px; border-bottom: 1px solid var(--rule); } .ds-search__input { flex: 1; height: 56px; border: 0; outline: 0; background: transparent; color: var(--heading); font: inherit; font-size: 17px; } .ds-search__kbd { padding: 2px 6px; border: 1px solid var(--rule); border-radius: 4px; background: var(--bg-subtle); color: var(--ink-muted); font-family: var(--font-mono); font-size: 11.5px; } .ds-search__results { margin: 0; padding: 6px; list-style: none; } .ds-search__result { display: grid; gap: 4px; padding: 12px 14px; border-radius: var(--radius); color: var(--ink); text-decoration: none; } .ds-search__result:hover, .ds-search__result:focus-visible { background: var(--bg-subtle); } .ds-search__result:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; } .ds-search__title { font-size: 15px; font-weight: 600; color: var(--heading); } .ds-search__excerpt { font-size: 14px; line-height: 1.55; color: var(--ink-muted); } .ds-search__excerpt mark { background: var(--mark); color: var(--heading); border-radius: 3px; padding: 0 0.1em; }"
+    },
+    {
+      "name": "Contents Rail",
+      "kind": "nav",
+      "refersTo": "toc",
+      "description": "Sticky table of contents with a hairline left edge; the item being read is cobalt.",
+      "html": "<nav class=\"ds-toc\"><h2 class=\"ds-toc__title\">Contents</h2><ul><li><a href=\"#\" aria-current=\"true\">The five-second stall</a></li><li><a href=\"#\">Reading thread dumps</a></li><li class=\"ds-toc__sub\"><a href=\"#\">Waiting threads</a></li><li><a href=\"#\">Fixing the boundary</a></li></ul></nav>",
+      "css": ".ds-toc { padding-left: 16px; border-left: 1px solid var(--rule); font-family: var(--font-sans); } .ds-toc__title { margin: 0 0 14px; font-size: 12px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-faint); } .ds-toc ul { margin: 0; padding: 0; list-style: none; } .ds-toc a { display: block; padding: 5px 0; font-size: 13.5px; line-height: 1.45; color: var(--ink-faint); text-decoration: none; transition: color 120ms ease-out; } .ds-toc__sub a { padding-left: 12px; font-size: 13px; } .ds-toc a:hover { color: var(--heading); } .ds-toc a[aria-current='true'] { color: var(--accent); font-weight: 600; } .ds-toc a:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 4px; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Quiet Column",
+    "overview": "One engineer's notebook set as a single calm reading column. The post title, its date, the opening answer and the code arrive first; everything else (navigation, contents, tags, related posts) stays in slate greys at the edge of attention. The world is the category standard for a personal developer blog, executed at the craft level of kciter.so and gwagjiug.com, without irony and without smuggled quirks.\n\nDensity is low and rhythm is generous: a 715px column (660px for English), 72px above page heads, 96px between home sections, 112px before the footer. Structure is drawn with 1px hairlines, never with boxes or cards. Colour is almost entirely neutral; a single cobalt accent appears only when the reader acts (hover, focus, the contents item they are reading). Light is the base; a graphite dark mode follows the system preference unless the reader overrides it.\n\nThe build refuses hero banners, card grids, gradient chrome and decorative shadows. Every text token clears WCAG AA against both page grounds in its own theme; the meta and label greys are deliberately darker than the reference sites use.",
+    "keyCharacteristics": [
+      "One reading column with a sticky contents rail on wide screens.",
+      "Pretendard for every word; JetBrains Mono only for code, dates, years and keyboard hints.",
+      "Hairline rules (1px) separate rows, sections and footers; no cards.",
+      "One cobalt accent, used only as a response to the reader.",
+      "Flat surfaces; the search dialog is the only thing that casts a shadow.",
+      "Lucide outline icons at stroke 1.75, plus the Simple Icons GitHub mark."
+    ],
+    "rules": [
+      {
+        "name": "The Reader's Cobalt Rule",
+        "body": "Cobalt answers the reader: hover, focus, current position, selection, copy confirmation, footnote links. It never colours a resting heading, a button fill, a background panel or a decoration.",
+        "section": "colors"
+      },
+      {
+        "name": "The AA Floor Rule",
+        "body": "Every text colour, including faint meta, clears 4.5:1 against both `paper` and `paper-subtle` in its own theme. Do not lighten meta text to match the references.",
+        "section": "colors"
+      },
+      {
+        "name": "The Mono Is For Machines Rule",
+        "body": "Mono sets only code, dates, years, counts and keyboard hints. Prose, navigation, titles and buttons are Pretendard.",
+        "section": "typography"
+      },
+      {
+        "name": "The Résumé Exception",
+        "body": "The standalone Résumé page deliberately breaks the mono rule, following kciter's Résumé. English is set all-mono at 13.5px / 1.7. Korean prose is set in Pretendard at 14.5px, because Hangul inside a mono stack falls back to a proportional face but keeps monospace word gaps; the name (700, 44px, -0.04em), dates, stacks and URLs stay mono in both languages. The exception is scoped to that page and is not a licence for mono elsewhere.",
+        "section": "typography"
+      },
+      {
+        "name": "The Upright Caption Rule",
+        "body": "Pretendard has no italic, so Markdown `*…*` captions after an image are set upright (no synthetic slant), centred, 14px, slate faint, 8px below the image.",
+        "section": "typography"
+      },
+      {
+        "name": "The Title-First Rule",
+        "body": "Dates and metadata follow the title, never precede it. On narrow screens the date moves under the title rather than above it as a label.",
+        "section": "layout"
+      },
+      {
+        "name": "The Trailing Separator Rule",
+        "body": "In wrapping meta lines the \"·\" separator (hairline strong) is attached to the end of the item before it, so a wrapped line never begins with a dot.",
+        "section": "layout"
+      },
+      {
+        "name": "The One Shadow Rule",
+        "body": "The search dialog is the only element with a shadow. Everything else is flat at rest and on hover.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "**Do** keep every surface flat and separate content with 1px hairlines (`hairline`, `hairline-strong`).",
+      "**Do** reserve cobalt for reader responses: hover, focus (2px outline, 3px offset), the active contents item, selection, footnote links, copy confirmation and the code highlight line tint.",
+      "**Do** set dates and metadata after the title, with \"·\" separators trailing their item.",
+      "**Do** use JetBrains Mono only for code, dates, years, counts and keyboard hints; the Résumé page is the one documented exception.",
+      "**Do** keep every text colour at WCAG AA or better in both themes.",
+      "**Do** use Lucide outline icons at stroke 1.75 and the Simple Icons GitHub mark, as inline SVG.",
+      "**Do** set Markdown image captions upright, centred, 14px and slate faint.",
+      "**Do** honour `prefers-reduced-motion`; transitions are 120ms ease-out colour changes, and only the search dialog animates its entrance."
+    ],
+    "donts": [
+      "**Don't** put an eyebrow, kicker or small label above a heading. Index section headings are the headings themselves.",
+      "**Don't** add shadows to anything but the search dialog.",
+      "**Don't** use cards, hero banners, card grids or gradient chrome.",
+      "**Don't** use cobalt as a resting colour for headings, buttons, fills or decoration.",
+      "**Don't** set prose in mono outside the Résumé page, and don't put Korean prose in mono even there.",
+      "**Don't** apply synthetic italic to Pretendard.",
+      "**Don't** lighten meta text below AA to match the reference sites.",
+      "**Don't** copy the references' identity: their names, text, images, logos or signature ornaments."
+    ]
+  }
+}

@@ -1,0 +1,15 @@
+# 이력서 데이터 (한국어). 비어 있는 섹션은 페이지에 표시되지 않습니다.
+# 필드 설명은 AUTHORING.md의 "Resume" 절을 참고하세요.
+profile:
+  name: NeedPainkiller
+  links:
+    - label: github.com/NeedPainkiller
+      url: https://github.com/NeedPainkiller
+
+experience: []
+projects: []
+openSource: []
+talks: []
+publications: []
+skills: []
+education: []

@@ -1,0 +1,9 @@
+---
+import ListView from '../../views/ListView.astro';
+import { ui } from '../../lib/i18n';
+import { getPosts } from '../../lib/posts';
+
+const posts = await getPosts('ko');
+---
+
+<ListView lang="ko" title={ui('ko').allPosts} posts={posts} path="posts" otherPath="posts" filters />

@@ -1,0 +1,19 @@
+---
+import ListView from '../../../views/ListView.astro';
+import { tagPaths } from '../../../lib/routes';
+import type { Post } from '../../../lib/posts';
+
+export const getStaticPaths = () => tagPaths('en');
+
+const { tag, posts, inOther } = Astro.props as { tag: string; posts: Post[]; inOther: boolean };
+const { tag: slug } = Astro.params;
+---
+
+<ListView
+  lang="en"
+  title={`#${tag}`}
+  posts={posts}
+  path={`tags/${slug}`}
+  otherPath={inOther ? `tags/${slug}` : undefined}
+  backToAll
+/>

@@ -1,0 +1,25 @@
+# build output
+dist/
+.astro/
+
+# dependencies
+node_modules/
+
+# logs and env
+npm-debug.log*
+.env
+.env.*
+
+# test output
+test-results/
+playwright-report/
+coverage/
+
+# Impeccable local artefacts (the surface brief and design.json stay tracked)
+.impeccable/config.local.json
+.impeccable/mocks/
+.impeccable/review/
+
+# OS / editor
+.DS_Store
+Thumbs.db

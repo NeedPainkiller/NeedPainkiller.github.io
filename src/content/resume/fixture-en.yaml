@@ -1,0 +1,45 @@
+# [Fixture data] Synthetic résumé used only in SHOW_DRAFTS=1 QA builds. Not a real history; never deployed.
+# publications is intentionally empty to check that empty sections stay hidden.
+profile:
+  name: NeedPainkiller
+  role: '[Fixture] Backend engineer'
+  summary: '[Fixture data] Synthetic résumé for layout checks. Not real experience.'
+  links:
+    - { label: github.com/NeedPainkiller, url: 'https://github.com/NeedPainkiller' }
+
+experience:
+  - period: { start: '2024.03' }
+    company: Example Company A
+    role: Backend engineer
+    summary: Ran the settlement batch and the order API.
+    highlights:
+      - Wrote the prevention checklist after a connection-pool outage
+      - Split the settlement batch so each stage can restart on its own
+    stack: [Kotlin, Spring Boot, PostgreSQL]
+  - period: { start: '2021.07', end: '2024.02' }
+    company: Example Company B
+    role: Full-stack engineer
+    stack: [TypeScript, React, Node.js]
+
+projects:
+  - name: Example project
+    period: { start: '2025.01', end: '2025.06' }
+    description: Built an internal log search tool.
+    stack: [Go, ClickHouse]
+
+openSource:
+  - { name: example-lib, url: 'https://example.com/example-lib', description: Example open-source entry }
+
+talks:
+  - { date: '2025.11', title: Example talk title, event: Example conference }
+
+publications: []
+
+skills:
+  - { category: Languages, items: [Kotlin, TypeScript, Go] }
+  - { category: Infrastructure, items: [AWS, Kubernetes, Terraform] }
+
+education:
+  - period: { start: '2014', end: '2018' }
+    school: Example University
+    detail: Computer science

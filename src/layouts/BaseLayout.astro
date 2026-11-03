@@ -1,0 +1,105 @@
+---
+import 'pretendard/dist/web/variable/pretendardvariable-dynamic-subset.css';
+import '@fontsource/jetbrains-mono/400.css';
+import '@fontsource/jetbrains-mono/500.css';
+import '../styles/tokens.css';
+import '../styles/base.css';
+import '../styles/prose.css';
+import '../styles/code.css';
+
+import Header, { type NavKey } from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import SearchDialog from '../components/SearchDialog.astro';
+import { absolute, asset, href, ui } from '../lib/i18n';
+import { otherLang } from '../lib/text';
+import { SITE, type Lang } from '../site.config';
+
+interface Props {
+  lang: Lang;
+  /** Page title; omitted on the home page, which uses the site name alone. */
+  title?: string;
+  description?: string;
+  /** Site paths (base included) of this page in each language that exists. */
+  alternates?: Partial<Record<Lang, string>>;
+  nav?: NavKey;
+  /** Site path or absolute URL of the share image. */
+  ogImage?: string;
+  article?: { published: Date; modified?: Date; tags?: string[] };
+  /** Standalone documents (the résumé) render without the site header, footer and search. */
+  bare?: boolean;
+  noindex?: boolean;
+}
+
+const { lang, title, description, alternates = {}, nav, ogImage, article, bare = false, noindex = false } = Astro.props;
+const t = ui(lang);
+const fullTitle = title ? `${title} · ${SITE.name}` : SITE.name;
+const desc = description ?? SITE.description[lang];
+const canonical = absolute(Astro.url.pathname);
+const other = otherLang(lang);
+const image = absolute(ogImage ?? asset('og-default.png'));
+const xDefault = alternates.ko ?? alternates.en;
+---
+
+<!doctype html>
+<html lang={lang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={desc} />
+    <link rel="canonical" href={canonical} />
+    {alternates.ko && <link rel="alternate" hreflang="ko" href={absolute(alternates.ko)} />}
+    {alternates.en && <link rel="alternate" hreflang="en" href={absolute(alternates.en)} />}
+    {xDefault && <link rel="alternate" hreflang="x-default" href={absolute(xDefault)} />}
+    <link rel="alternate" type="application/rss+xml" title={`${SITE.name} (${t.langName})`} href={href(lang, 'rss.xml')} />
+    <link rel="icon" href={asset('favicon.svg')} type="image/svg+xml" />
+    <link rel="sitemap" href={asset('sitemap-index.xml')} />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#15171a" media="(prefers-color-scheme: dark)" />
+    {noindex && <meta name="robots" content="noindex" />}
+
+    <meta property="og:site_name" content={SITE.name} />
+    <meta property="og:title" content={title ?? SITE.name} />
+    <meta property="og:description" content={desc} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:type" content={article ? 'article' : 'website'} />
+    <meta property="og:locale" content={lang === 'ko' ? 'ko_KR' : 'en_US'} />
+    <meta property="og:image" content={image} />
+    <meta name="twitter:card" content="summary_large_image" />
+    {article && <meta property="article:published_time" content={article.published.toISOString()} />}
+    {article?.modified && <meta property="article:modified_time" content={article.modified.toISOString()} />}
+    {article?.tags?.map((tag) => <meta property="article:tag" content={tag} />)}
+    <meta name="generator" content={Astro.generator} />
+
+    <script is:inline>
+      (function () {
+        var d = document.documentElement;
+        d.classList.add('js');
+        try {
+          var t = localStorage.getItem('theme');
+          if (t === 'dark' || t === 'light') d.dataset.theme = t;
+        } catch (e) {}
+      })();
+    </script>
+  </head>
+  <body>
+    {
+      bare ? (
+        <slot />
+      ) : (
+        <>
+          <a class="skip-link" href="#main">
+            {t.skip}
+          </a>
+          <Header lang={lang} current={nav} langTarget={alternates[other]} />
+          <main id="main">
+            <slot />
+          </main>
+          <Footer lang={lang} />
+          <SearchDialog lang={lang} />
+        </>
+      )
+    }
+  </body>
+</html>

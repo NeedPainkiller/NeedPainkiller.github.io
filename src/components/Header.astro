@@ -1,0 +1,302 @@
+---
+import Icon from './Icon.astro';
+import { href, ui } from '../lib/i18n';
+import { otherLang } from '../lib/text';
+import { SITE, type Lang } from '../site.config';
+
+export type NavKey = 'home' | 'posts' | 'timeline' | 'about' | 'resume';
+
+interface Props {
+  lang: Lang;
+  current?: NavKey;
+  /** Where the language switch leads: the translated page when one exists, otherwise that language's home. */
+  langTarget?: string;
+}
+
+const { lang, current, langTarget } = Astro.props;
+const t = ui(lang);
+const other = otherLang(lang);
+const switchHref = langTarget ?? href(other);
+const switchLabel = other === 'en' ? 'Read in English' : '한국어로 보기';
+
+const items: { key: NavKey; label: string; path: string }[] = [
+  { key: 'posts', label: t.posts, path: 'posts' },
+  { key: 'timeline', label: t.timeline, path: 'timeline' },
+  { key: 'about', label: t.about, path: 'about' },
+  { key: 'resume', label: t.resume, path: 'resume' },
+];
+---
+
+<header class="site-header">
+  <div class="wrap site-header__inner">
+    <a class="wordmark" href={href(lang)} aria-current={current === 'home' ? 'page' : undefined}>{SITE.name}</a>
+
+    <nav class="site-nav" aria-label={lang === 'ko' ? '주 메뉴' : 'Main'}>
+      <ul>
+        {
+          items.map((item) => (
+            <li>
+              <a href={href(lang, item.path)} aria-current={current === item.key ? 'page' : undefined}>
+                {item.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+
+    <div class="site-tools">
+      <button class="search-trigger js-only" type="button" data-search-open aria-haspopup="dialog">
+        <Icon name="search" size={15} />
+        <span class="search-trigger__label">{t.search}</span>
+        <kbd class="search-trigger__kbd" data-search-kbd>⌘K</kbd>
+      </button>
+      <a class="tool-btn tool-btn--lang" href={switchHref} hreflang={other} lang={other} aria-label={switchLabel}>
+        {other.toUpperCase()}
+      </a>
+      <button class="tool-btn js-only" type="button" data-theme-toggle aria-label={t.themeToggle}>
+        <span class="theme-icon theme-icon--moon"><Icon name="moon" size={17} /></span>
+        <span class="theme-icon theme-icon--sun"><Icon name="sun" size={17} /></span>
+      </button>
+      <button class="tool-btn menu-btn" type="button" popovertarget="mobile-nav" aria-label={t.menu}>
+        <Icon name="menu" size={19} />
+      </button>
+    </div>
+  </div>
+
+  <nav id="mobile-nav" class="mobile-nav" popover aria-label={t.menu}>
+    <ul>
+      {
+        items.map((item) => (
+          <li>
+            <a href={href(lang, item.path)} aria-current={current === item.key ? 'page' : undefined}>
+              {item.label}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </nav>
+</header>
+
+<script>
+  const root = document.documentElement;
+
+  function effectiveTheme(): 'light' | 'dark' {
+    const set = root.dataset.theme;
+    if (set === 'light' || set === 'dark') return set;
+    return matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+  }
+
+  for (const button of document.querySelectorAll<HTMLButtonElement>('[data-theme-toggle]')) {
+    const sync = () => button.setAttribute('aria-pressed', String(effectiveTheme() === 'dark'));
+    sync();
+    button.addEventListener('click', () => {
+      const next = effectiveTheme() === 'dark' ? 'light' : 'dark';
+      root.dataset.theme = next;
+      try {
+        localStorage.setItem('theme', next);
+      } catch {
+        /* storage unavailable: the choice lasts for this page only */
+      }
+      sync();
+      document.dispatchEvent(new CustomEvent('themechange', { detail: next }));
+    });
+  }
+
+  const isMac = /Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent);
+  for (const kbd of document.querySelectorAll<HTMLElement>('[data-search-kbd]')) {
+    kbd.textContent = isMac ? '⌘K' : 'Ctrl K';
+  }
+
+  const mobileNav = document.getElementById('mobile-nav');
+  mobileNav?.addEventListener('click', (event) => {
+    if ((event.target as HTMLElement).closest('a')) mobileNav.hidePopover?.();
+  });
+</script>
+
+<style>
+  .site-header {
+    padding-top: 36px;
+  }
+  .site-header__inner {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+    min-height: 40px;
+  }
+  .wordmark {
+    font-size: 19px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--heading);
+    text-decoration: none;
+    white-space: nowrap;
+  }
+  .site-nav {
+    margin-left: auto;
+  }
+  .site-nav ul,
+  .mobile-nav ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .site-nav ul {
+    display: flex;
+    gap: 22px;
+  }
+  .site-nav a {
+    display: inline-block;
+    padding: 6px 0;
+    font-size: 15px;
+    color: var(--ink-muted);
+    text-decoration: none;
+    transition: color 120ms ease-out;
+  }
+  .site-nav a:hover,
+  .site-nav a[aria-current='page'] {
+    color: var(--heading);
+  }
+  .site-nav a[aria-current='page'] {
+    font-weight: 600;
+  }
+
+  .site-tools {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .search-trigger {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    height: 34px;
+    min-width: 136px;
+    margin-right: 6px;
+    padding: 0 6px 0 10px;
+    border: 1px solid var(--rule-strong);
+    border-radius: var(--radius);
+    background: var(--bg);
+    color: var(--ink-faint);
+    font-size: 14px;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: border-color 120ms ease-out, color 120ms ease-out;
+  }
+  .search-trigger:hover {
+    border-color: var(--ink-faint);
+    color: var(--ink-muted);
+  }
+  .search-trigger__kbd {
+    flex: none;
+    margin-left: auto;
+    padding: 1px 5px;
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    background: var(--bg-subtle);
+    color: var(--ink-muted);
+    font-size: 11.5px;
+    line-height: 1.5;
+  }
+  .tool-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 34px;
+    height: 34px;
+    padding: 0 6px;
+    border: 0;
+    border-radius: var(--radius);
+    background: transparent;
+    color: var(--ink-muted);
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color 120ms ease-out, color 120ms ease-out;
+  }
+  .tool-btn:hover {
+    background: var(--bg-subtle);
+    color: var(--heading);
+  }
+  .theme-icon {
+    display: inline-flex;
+  }
+  .theme-icon--sun {
+    display: none;
+  }
+  :global(:root[data-theme='dark']) .theme-icon--sun {
+    display: inline-flex;
+  }
+  :global(:root[data-theme='dark']) .theme-icon--moon {
+    display: none;
+  }
+  @media (prefers-color-scheme: dark) {
+    :global(:root:not([data-theme='light'])) .theme-icon--sun {
+      display: inline-flex;
+    }
+    :global(:root:not([data-theme='light'])) .theme-icon--moon {
+      display: none;
+    }
+  }
+
+  .menu-btn {
+    display: none;
+  }
+
+  .mobile-nav {
+    position: fixed;
+    inset: 64px 16px auto auto;
+    width: min(300px, calc(100vw - 32px));
+    margin: 0;
+    padding: 6px;
+    border: 1px solid var(--rule-strong);
+    border-radius: 12px;
+    background: var(--bg-raised);
+    color: var(--ink);
+  }
+  .mobile-nav a {
+    display: block;
+    padding: 12px 14px;
+    border-radius: var(--radius);
+    font-size: 16px;
+    text-decoration: none;
+  }
+  .mobile-nav a:hover {
+    background: var(--bg-subtle);
+  }
+  .mobile-nav a[aria-current='page'] {
+    font-weight: 600;
+    color: var(--heading);
+  }
+
+  @media (max-width: 760px) {
+    .site-header {
+      padding-top: 14px;
+    }
+    .site-nav {
+      display: none;
+    }
+    .site-tools {
+      margin-left: auto;
+    }
+    .search-trigger {
+      min-width: 34px;
+      width: 34px;
+      margin-right: 0;
+      padding: 0;
+      justify-content: center;
+      border: 0;
+      color: var(--ink-muted);
+    }
+    .search-trigger__label,
+    .search-trigger__kbd {
+      display: none;
+    }
+    .menu-btn {
+      display: inline-flex;
+    }
+  }
+</style>

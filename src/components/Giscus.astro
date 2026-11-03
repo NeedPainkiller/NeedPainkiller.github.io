@@ -1,0 +1,79 @@
+---
+import { ui } from '../lib/i18n';
+import { SITE, type Lang } from '../site.config';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = ui(lang);
+const g = SITE.giscus;
+const enabled = Boolean(g.repoId && g.categoryId);
+---
+
+{
+  enabled && (
+    <section class="comments js-only" aria-labelledby="comments-title" data-pagefind-ignore>
+      <h2 id="comments-title" class="section-heading">
+        {t.comments}
+      </h2>
+      <div
+        class="comments__frame"
+        data-giscus
+        data-repo={g.repo}
+        data-repo-id={g.repoId}
+        data-category={g.category}
+        data-category-id={g.categoryId}
+        data-lang={lang}
+      />
+    </section>
+  )
+}
+
+<script>
+  const host = document.querySelector<HTMLElement>('[data-giscus]');
+  if (host) {
+    const themeNow = () => {
+      const set = document.documentElement.dataset.theme;
+      const dark = set ? set === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches;
+      return dark ? 'dark' : 'light';
+    };
+    const s = document.createElement('script');
+    s.src = 'https://giscus.app/client.js';
+    s.async = true;
+    s.crossOrigin = 'anonymous';
+    const d = host.dataset;
+    const attrs: Record<string, string> = {
+      'data-repo': d.repo!,
+      'data-repo-id': d.repoId!,
+      'data-category': d.category!,
+      'data-category-id': d.categoryId!,
+      'data-mapping': 'pathname',
+      'data-strict': '1',
+      'data-reactions-enabled': '1',
+      'data-emit-metadata': '0',
+      'data-input-position': 'top',
+      'data-theme': themeNow(),
+      'data-lang': d.lang!,
+      'data-loading': 'lazy',
+    };
+    for (const [k, v] of Object.entries(attrs)) s.setAttribute(k, v);
+    host.append(s);
+
+    document.addEventListener('themechange', () => {
+      const frame = document.querySelector<HTMLIFrameElement>('iframe.giscus-frame');
+      frame?.contentWindow?.postMessage({ giscus: { setConfig: { theme: themeNow() } } }, 'https://giscus.app');
+    });
+  }
+</script>
+
+<style>
+  .comments {
+    margin-top: 72px;
+  }
+  .comments__frame {
+    margin-top: 20px;
+    min-height: 120px;
+  }
+</style>

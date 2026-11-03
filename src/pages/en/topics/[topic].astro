@@ -1,0 +1,20 @@
+---
+import ListView from '../../../views/ListView.astro';
+import { topicName } from '../../../lib/i18n';
+import { topicPaths } from '../../../lib/routes';
+import type { Post } from '../../../lib/posts';
+import type { Topic } from '../../../site.config';
+
+export const getStaticPaths = () => topicPaths('en');
+
+const { topic, posts } = Astro.props as { topic: Topic; posts: Post[] };
+---
+
+<ListView
+  lang="en"
+  title={topicName('en', topic)}
+  posts={posts}
+  path={`topics/${topic}`}
+  otherPath={`topics/${topic}`}
+  activeTopic={topic}
+/>

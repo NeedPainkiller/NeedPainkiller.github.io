@@ -1,0 +1,74 @@
+---
+import { getEntry, render } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { href, ui } from '../lib/i18n';
+import { SITE, type Lang } from '../site.config';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = ui(lang);
+const entry = await getEntry('pages', `about.${lang}`);
+if (!entry) throw new Error(`Missing src/content/pages/about.${lang}.md`);
+const { Content } = await render(entry);
+---
+
+<BaseLayout
+  lang={lang}
+  title={entry.data.title}
+  description={entry.data.description}
+  nav="about"
+  alternates={{ ko: href('ko', 'about'), en: href('en', 'about') }}
+>
+  <div class="wrap about">
+    <h1 class="page-title">{entry.data.title}</h1>
+    <div class="prose about__body">
+      <Content />
+    </div>
+    <ul class="about__links">
+      <li><a href={href(lang, 'resume')}>{t.resume}</a></li>
+      <li><a href={SITE.author.github} rel="me noopener">GitHub</a></li>
+      <li><a href={href(lang, 'rss.xml')}>RSS</a></li>
+    </ul>
+  </div>
+</BaseLayout>
+
+<style>
+  .about {
+    padding-top: 72px;
+  }
+  .about__body {
+    margin-top: 28px;
+    font-size: 16.5px;
+  }
+  .about__links {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 40px 0 0;
+    padding: 20px 0 0;
+    list-style: none;
+    border-top: 1px solid var(--rule);
+    font-size: 14.5px;
+  }
+  /* Separators trail their item so a wrapped line never starts with a dot. */
+  .about__links li:not(:last-child)::after {
+    content: '·';
+    margin: 0 10px;
+    color: var(--rule-strong);
+  }
+  .about__links a {
+    color: var(--ink-muted);
+    text-decoration: none;
+  }
+  .about__links a:hover {
+    color: var(--accent);
+    text-decoration: underline;
+  }
+  @media (max-width: 640px) {
+    .about {
+      padding-top: 40px;
+    }
+  }
+</style>

@@ -1,0 +1,91 @@
+/*
+ * Design tokens. Light is the base; dark applies when the reader picked it, or when the
+ * system asks for it and the reader has not picked light. Every text token clears WCAG AA
+ * (4.5:1) against --bg and --bg-subtle in its own theme.
+ */
+:root {
+  color-scheme: light;
+  --bg: #ffffff;
+  --bg-subtle: #f5f6f8;
+  --bg-raised: #ffffff;
+  --ink: #212b36;
+  --heading: #161d26;
+  --ink-muted: #56606b;
+  --ink-faint: #67707b;
+  --rule: #e7e9ec;
+  --rule-strong: #d4d8dd;
+  --accent: #2851c6;
+  --accent-ink: #ffffff;
+  --accent-soft: #edf1fd;
+  --mark: #fdeca2;
+  --scrim: rgb(22 29 38 / 0.32);
+  --code-bg: #ffffff;
+  --code-line-hl: #eef2fc;
+  --diff-add: #e8f6ed;
+  --diff-del: #fcecec;
+  --shadow-dialog: 0 24px 48px -16px rgb(22 29 38 / 0.28), 0 2px 6px rgb(22 29 38 / 0.08);
+
+  --font-sans: 'Pretendard Variable', Pretendard, -apple-system, BlinkMacSystemFont, system-ui,
+    'Apple SD Gothic Neo', 'Noto Sans KR', 'Malgun Gothic', sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, 'Pretendard Variable',
+    monospace;
+
+  --col: 715px;
+  --rail: 216px;
+  --rail-gap: 56px;
+  --gutter: 20px;
+  --radius: 8px;
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+html[lang='en'] {
+  --col: 660px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    color-scheme: dark;
+    --bg: #15171a;
+    --bg-subtle: #1c1f23;
+    --bg-raised: #1f2226;
+    --ink: #dfe3e8;
+    --heading: #f2f4f6;
+    --ink-muted: #a9b1bb;
+    --ink-faint: #949ca6;
+    --rule: #2a2e33;
+    --rule-strong: #3a3f46;
+    --accent: #8fa9ff;
+    --accent-ink: #0d1020;
+    --accent-soft: #1e2640;
+    --mark: #5c4c12;
+    --scrim: rgb(0 0 0 / 0.55);
+    --code-bg: #181b1f;
+    --code-line-hl: #212a3e;
+    --diff-add: #13291c;
+    --diff-del: #301a1c;
+    --shadow-dialog: 0 24px 48px -16px rgb(0 0 0 / 0.6), 0 2px 6px rgb(0 0 0 / 0.3);
+  }
+}
+
+:root[data-theme='dark'] {
+  color-scheme: dark;
+  --bg: #15171a;
+  --bg-subtle: #1c1f23;
+  --bg-raised: #1f2226;
+  --ink: #dfe3e8;
+  --heading: #f2f4f6;
+  --ink-muted: #a9b1bb;
+  --ink-faint: #949ca6;
+  --rule: #2a2e33;
+  --rule-strong: #3a3f46;
+  --accent: #8fa9ff;
+  --accent-ink: #0d1020;
+  --accent-soft: #1e2640;
+  --mark: #5c4c12;
+  --scrim: rgb(0 0 0 / 0.55);
+  --code-bg: #181b1f;
+  --code-line-hl: #212a3e;
+  --diff-add: #13291c;
+  --diff-del: #301a1c;
+  --shadow-dialog: 0 24px 48px -16px rgb(0 0 0 / 0.6), 0 2px 6px rgb(0 0 0 / 0.3);
+}

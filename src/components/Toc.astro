@@ -1,0 +1,207 @@
+---
+import Icon from './Icon.astro';
+import { ui } from '../lib/i18n';
+import type { Lang } from '../site.config';
+
+interface Heading {
+  depth: number;
+  slug: string;
+  text: string;
+}
+
+interface Props {
+  lang: Lang;
+  headings: Heading[];
+  /** Below this many entries the contents add nothing and are not shown. */
+  min?: number;
+}
+
+const { lang, headings, min = 3 } = Astro.props;
+const t = ui(lang);
+// The footnotes heading is a screen-reader landmark, not a section of the post.
+const items = headings.filter((h) => (h.depth === 2 || h.depth === 3) && h.slug !== 'footnote-label');
+const show = items.length >= min;
+---
+
+{
+  show && (
+    <>
+      <nav class="toc toc--rail" aria-labelledby="toc-title" data-toc>
+        <h2 id="toc-title" class="toc__title">
+          {t.contents}
+        </h2>
+        <ol class="toc__list">
+          {items.map((h) => (
+            <li class:list={['toc__item', { 'toc__item--sub': h.depth === 3 }]}>
+              <a href={`#${h.slug}`} data-toc-link={h.slug}>
+                {h.text}
+              </a>
+            </li>
+          ))}
+        </ol>
+      </nav>
+
+      <button class="toc-pill" type="button" popovertarget="toc-sheet">
+        <Icon name="list" size={16} />
+        {t.contents}
+      </button>
+      {/* A dialog, not a second <nav>: the rail is the page's one contents landmark. */}
+      <div id="toc-sheet" class="toc toc--sheet" popover role="dialog" aria-label={t.contents} data-toc>
+        <ol class="toc__list">
+          {items.map((h) => (
+            <li class:list={['toc__item', { 'toc__item--sub': h.depth === 3 }]}>
+              <a href={`#${h.slug}`} data-toc-link={h.slug}>
+                {h.text}
+              </a>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </>
+  )
+}
+
+<script>
+  const links = [...document.querySelectorAll<HTMLAnchorElement>('[data-toc-link]')];
+  const targets = [...new Set(links.map((a) => a.dataset.tocLink!))]
+    .map((id) => document.getElementById(id))
+    .filter((el): el is HTMLElement => !!el);
+
+  const sheet = document.getElementById('toc-sheet');
+  sheet?.addEventListener('click', (event) => {
+    if ((event.target as HTMLElement).closest('a')) sheet.hidePopover?.();
+  });
+
+  if (targets.length) {
+    const setActive = (id: string) => {
+      for (const a of links) {
+        if (a.dataset.tocLink === id) a.setAttribute('aria-current', 'true');
+        else a.removeAttribute('aria-current');
+      }
+    };
+    const update = () => {
+      const line = 120;
+      let current = targets[0]!.id;
+      for (const el of targets) {
+        if (el.getBoundingClientRect().top - line <= 0) current = el.id;
+        else break;
+      }
+      setActive(current);
+    };
+    let queued = false;
+    addEventListener(
+      'scroll',
+      () => {
+        if (queued) return;
+        queued = true;
+        requestAnimationFrame(() => {
+          queued = false;
+          update();
+        });
+      },
+      { passive: true },
+    );
+    update();
+  }
+</script>
+
+<style>
+  .toc__title {
+    margin-bottom: 14px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+  }
+  :lang(ko) .toc__title {
+    letter-spacing: 0.04em;
+  }
+  .toc__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .toc__item a {
+    display: block;
+    padding: 5px 0;
+    font-size: 13.5px;
+    line-height: 1.45;
+    color: var(--ink-faint);
+    text-decoration: none;
+    transition: color 120ms ease-out;
+  }
+  .toc__item--sub a {
+    padding-left: 12px;
+    font-size: 13px;
+  }
+  .toc__item a:hover {
+    color: var(--heading);
+  }
+  .toc__item a[aria-current='true'] {
+    color: var(--accent);
+    font-weight: 600;
+  }
+
+  .toc--rail {
+    position: sticky;
+    top: 40px;
+    max-height: calc(100vh - 80px);
+    overflow-y: auto;
+    padding-left: 16px;
+    border-left: 1px solid var(--rule);
+  }
+
+  .toc-pill {
+    display: none;
+  }
+  .toc--sheet {
+    position: fixed;
+    inset: auto 12px 76px 12px;
+    width: auto;
+    height: auto;
+    max-height: 60vh;
+    margin: 0;
+    padding: 14px 18px;
+    overflow-y: auto;
+    border: 1px solid var(--rule-strong);
+    border-radius: 14px;
+    background: var(--bg-raised);
+    color: var(--ink);
+  }
+  .toc--sheet::backdrop {
+    background: var(--scrim);
+  }
+  .toc--sheet .toc__item a {
+    padding: 9px 0;
+    font-size: 15px;
+  }
+  .toc--sheet .toc__item--sub a {
+    font-size: 14px;
+  }
+
+  @media (max-width: 1259px) {
+    .toc--rail {
+      display: none;
+    }
+    .toc-pill {
+      position: fixed;
+      left: 50%;
+      bottom: 20px;
+      translate: -50% 0;
+      z-index: 20;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      height: 40px;
+      padding: 0 16px;
+      border: 1px solid var(--rule-strong);
+      border-radius: 999px;
+      background: var(--bg-raised);
+      color: var(--heading);
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+  }
+</style>

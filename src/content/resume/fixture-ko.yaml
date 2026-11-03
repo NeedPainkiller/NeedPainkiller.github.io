@@ -1,0 +1,45 @@
+# [예시 데이터] SHOW_DRAFTS=1 QA 빌드에서만 쓰는 가상 이력입니다. 실제 이력이 아니며 배포되지 않습니다.
+# 레이아웃 검증용: publications는 일부러 비워 빈 섹션이 숨겨지는지 확인합니다.
+profile:
+  name: NeedPainkiller
+  role: '[예시] 백엔드 엔지니어'
+  summary: '[예시 데이터] 레이아웃 검증용 가상 이력입니다. 실제 경력이 아닙니다.'
+  links:
+    - { label: github.com/NeedPainkiller, url: 'https://github.com/NeedPainkiller' }
+
+experience:
+  - period: { start: '2024.03' }
+    company: 예시 회사 A
+    role: 백엔드 엔지니어
+    summary: 정산 배치와 주문 API를 운영했다.
+    highlights:
+      - 커넥션 풀 장애의 재발 방지 체크리스트를 만들었다
+      - 정산 배치를 단계별로 재시작할 수 있게 나눴다
+    stack: [Kotlin, Spring Boot, PostgreSQL]
+  - period: { start: '2021.07', end: '2024.02' }
+    company: 예시 회사 B
+    role: 풀스택 엔지니어
+    stack: [TypeScript, React, Node.js]
+
+projects:
+  - name: 예시 프로젝트
+    period: { start: '2025.01', end: '2025.06' }
+    description: 사내 로그 검색 도구를 만들었다.
+    stack: [Go, ClickHouse]
+
+openSource:
+  - { name: example-lib, url: 'https://example.com/example-lib', description: 예시 오픈소스 항목 }
+
+talks:
+  - { date: '2025.11', title: 예시 발표 제목, event: 예시 컨퍼런스 }
+
+publications: []
+
+skills:
+  - { category: 언어, items: [Kotlin, TypeScript, Go] }
+  - { category: 인프라, items: [AWS, Kubernetes, Terraform] }
+
+education:
+  - period: { start: '2014', end: '2018' }
+    school: 예시 대학교
+    detail: 컴퓨터공학

@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- Placeholder monogram until the author's logo is added. -->
+  <style>
+    .bg { fill: #161d26; }
+    .fg { fill: #ffffff; }
+    @media (prefers-color-scheme: dark) {
+      .bg { fill: #f2f4f6; }
+      .fg { fill: #15171a; }
+    }
+  </style>
+  <rect class="bg" width="32" height="32" rx="7" />
+  <path class="fg" d="M9 23V9h2.9l7.3 9.3V9H22v14h-2.9l-7.3-9.3V23z" />
+</svg>

@@ -1,0 +1,70 @@
+---
+import Icon from './Icon.astro';
+import { href, ui } from '../lib/i18n';
+import { SITE, type Lang } from '../site.config';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = ui(lang);
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <div class="wrap site-footer__inner">
+    <p class="site-footer__meta">© {year} {SITE.name}</p>
+    <ul class="site-footer__links">
+      <li>
+        <a href={SITE.author.github} rel="me noopener" aria-label="GitHub">
+          <Icon name="github" size={17} />
+        </a>
+      </li>
+      <li>
+        <a href={href(lang, 'rss.xml')} aria-label={t.rss}>
+          <Icon name="rss" size={17} />
+        </a>
+      </li>
+    </ul>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    margin-top: 112px;
+  }
+  .site-footer__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 24px 0 48px;
+    border-top: 1px solid var(--rule);
+  }
+  .site-footer__meta {
+    font-size: 14px;
+    color: var(--ink-faint);
+  }
+  .site-footer__links {
+    display: flex;
+    gap: 4px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .site-footer__links a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    border-radius: var(--radius);
+    color: var(--ink-muted);
+    transition: background-color 120ms ease-out, color 120ms ease-out;
+  }
+  .site-footer__links a:hover {
+    background: var(--bg-subtle);
+    color: var(--heading);
+  }
+</style>

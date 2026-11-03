@@ -1,0 +1,143 @@
+/*
+ * Code blocks produced by Shiki (dual themes, defaultColor: false) and wrapped by the
+ * code-frame transformer: <figure.code-frame><figcaption/><pre/></figure>.
+ */
+.code-frame {
+  margin-block: 1.6em;
+  border: 1px solid var(--rule-strong);
+  border-radius: var(--radius);
+  background: var(--code-bg);
+  overflow: hidden;
+}
+
+.code-frame__caption {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 38px;
+  padding: 0 8px 0 14px;
+  border-bottom: 1px solid var(--rule);
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  line-height: 1.4;
+  color: var(--ink-muted);
+}
+.code-frame__title {
+  color: var(--heading);
+  font-weight: 500;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.code-frame__lang {
+  margin-left: auto;
+  color: var(--ink-faint);
+  text-transform: lowercase;
+}
+.code-frame[data-has-title='false'] .code-frame__caption:has(.code-frame__lang:empty) {
+  min-height: 0;
+  border-bottom: 0;
+}
+
+.code-copy {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 28px;
+  padding: 0 8px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--ink-muted);
+  font-family: var(--font-sans);
+  font-size: 12.5px;
+  cursor: pointer;
+  transition: background-color 120ms ease-out, color 120ms ease-out;
+}
+.code-copy:hover {
+  background: var(--bg-subtle);
+  color: var(--heading);
+}
+.code-copy[data-copied] {
+  color: var(--accent);
+}
+
+.code-frame pre {
+  margin: 0;
+  padding: 14px 0;
+  overflow-x: auto;
+  font-size: 14px;
+  line-height: 1.7;
+  tab-size: 2;
+  background: transparent !important;
+}
+.code-frame pre:focus-visible {
+  outline-offset: -2px;
+}
+.code-frame code {
+  display: block;
+  width: max-content;
+  min-width: 100%;
+  counter-reset: line;
+}
+
+.code-frame .line {
+  display: inline-block;
+  min-width: 100%;
+  padding: 0 18px 0 16px;
+}
+.code-frame pre:not([data-nolines]) .line::before {
+  counter-increment: line;
+  content: counter(line);
+  display: inline-block;
+  width: 2.5ch;
+  margin-right: 18px;
+  text-align: right;
+  color: var(--ink-faint);
+  opacity: 0.85;
+  user-select: none;
+}
+/* Shiki emits a trailing empty line span in some cases; keep it from numbering. */
+.code-frame code > .line:last-child:empty {
+  display: none;
+}
+
+.code-frame .line.highlighted {
+  background: var(--code-line-hl);
+}
+.code-frame .line.diff.add {
+  background: var(--diff-add);
+}
+.code-frame .line.diff.remove {
+  background: var(--diff-del);
+  opacity: 0.85;
+}
+.code-frame .line.diff.add::after,
+.code-frame .line.diff.remove::after {
+  position: absolute;
+  left: 4px;
+}
+
+/* Token colours from Shiki's dual themes. */
+.code-frame pre span {
+  color: var(--shiki-light);
+}
+:root[data-theme='dark'] .code-frame pre span {
+  color: var(--shiki-dark);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) .code-frame pre span {
+    color: var(--shiki-dark);
+  }
+}
+
+@media (max-width: 640px) {
+  .code-frame {
+    margin-inline: calc(-1 * var(--gutter));
+    border-radius: 0;
+    border-inline: 0;
+  }
+  .code-frame pre {
+    font-size: 13px;
+  }
+}

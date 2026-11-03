@@ -1,0 +1,369 @@
+---
+import { Image } from 'astro:assets';
+import { render } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Giscus from '../components/Giscus.astro';
+import Icon from '../components/Icon.astro';
+import PostList from '../components/PostList.astro';
+import Toc from '../components/Toc.astro';
+import { href, topicName, ui } from '../lib/i18n';
+import { getPosts, getTranslation, langOf, minutesOf, relatedPosts, slugOf, type Post } from '../lib/posts';
+import { isoDate, otherLang, tagSlug } from '../lib/text';
+import { SITE } from '../site.config';
+
+interface Props {
+  post: Post;
+}
+
+const { post } = Astro.props;
+const lang = langOf(post);
+const other = otherLang(lang);
+const t = ui(lang);
+const slug = slugOf(post);
+const { Content, headings } = await render(post);
+const translation = await getTranslation(post);
+const pool = await getPosts(lang);
+// Every post ends with a next read: related posts when tags/topics match, otherwise the latest ones.
+const matched = relatedPosts(post, pool, 3);
+const nextReads = matched.length ? matched : pool.filter((p) => p.id !== post.id).slice(0, 3);
+const nextTitle = matched.length ? t.related : t.recentPosts;
+const { title, description, date, updated, topics, tags, thumbnail, thumbnailAlt } = post.data;
+
+const alternates = {
+  [lang]: href(lang, `posts/${slug}`),
+  ...(translation ? { [other]: href(other, `posts/${slug}`) } : {}),
+};
+---
+
+<BaseLayout
+  lang={lang}
+  title={title}
+  description={description}
+  alternates={alternates}
+  nav="posts"
+  ogImage={thumbnail?.src}
+  article={{ published: date, modified: updated, tags }}
+>
+  <div class="post-grid">
+    <article class="post" data-pagefind-body>
+      <header class="post__header">
+        <h1 class="post__title">{title}</h1>
+        <p class="post__meta" data-pagefind-ignore>
+          <time datetime={isoDate(date)}>{isoDate(date)}</time>
+          {
+            updated && (
+              <span>
+                {t.updated} <time datetime={isoDate(updated)}>{isoDate(updated)}</time>
+              </span>
+            )
+          }
+          <span>{t.minutes(minutesOf(post))}</span>
+          <span class="post__topics">
+            {
+              topics.map((topic, i) => (
+                <>
+                  {i > 0 && ', '}
+                  <a href={href(lang, `topics/${topic}`)}>{topicName(lang, topic)}</a>
+                </>
+              ))
+            }
+          </span>
+          <span class="post__langs">
+            <Icon name="languages" size={14} />
+            <span class="post__lang-current">{t.langName}</span>
+            {
+              translation && (
+                <a href={href(other, `posts/${slug}`)} hreflang={other} lang={other}>
+                  {ui(other).langName}
+                </a>
+              )
+            }
+          </span>
+        </p>
+      </header>
+
+      {
+        thumbnail && (
+          <Image class="post__thumb" src={thumbnail} alt={thumbnailAlt ?? ''} width={1430} loading="eager" />
+        )
+      }
+
+      <div
+        class="prose post__body"
+        data-post-body
+        data-copy={t.copy}
+        data-copied={t.copied}
+        data-copy-label={t.copyLabel}
+        data-anchor-label={t.anchorLabel}
+        data-footnotes-label={t.footnotes}
+        data-image-full={lang === 'ko' ? '원본 크기로 보기' : 'Open full size'}
+        data-backref-label={lang === 'ko' ? '본문으로 돌아가기' : 'Back to text'}
+      >
+        <Content />
+      </div>
+
+      <footer class="post__footer" data-pagefind-ignore>
+        {
+          tags.length > 0 && (
+            <ul class="post__tags" aria-label={t.tags}>
+              {tags.map((tag) => (
+                <li>
+                  <a href={href(lang, `tags/${tagSlug(tag)}`)}>#{tag}</a>
+                </li>
+              ))}
+            </ul>
+          )
+        }
+        <p class="post__author">
+          {t.writtenBy} <a href={SITE.author.github} rel="author">{SITE.author.name}</a>
+        </p>
+      </footer>
+    </article>
+
+    <aside class="post-rail" data-pagefind-ignore>
+      <Toc lang={lang} headings={headings} />
+    </aside>
+  </div>
+
+  {
+    nextReads.length > 0 && (
+      <section class="wrap related" aria-labelledby="related-title" data-pagefind-ignore>
+        <h2 id="related-title" class="section-heading">
+          {nextTitle}
+        </h2>
+        <PostList lang={lang} posts={nextReads} compact />
+      </section>
+    )
+  }
+
+  <div class="wrap">
+    <Giscus lang={lang} />
+  </div>
+
+  <template id="icon-copy"><Icon name="copy" size={14} /></template>
+  <template id="icon-check"><Icon name="check" size={14} /></template>
+</BaseLayout>
+
+<script>
+  const body = document.querySelector<HTMLElement>('[data-post-body]');
+  if (body) {
+    const label = body.dataset;
+    const copyIcon = document.querySelector<HTMLTemplateElement>('#icon-copy')?.innerHTML ?? '';
+    const checkIcon = document.querySelector<HTMLTemplateElement>('#icon-check')?.innerHTML ?? '';
+
+    for (const frame of body.querySelectorAll<HTMLElement>('figure.code-frame')) {
+      const caption = frame.querySelector('figcaption');
+      const code = frame.querySelector('code');
+      if (!caption || !code || !navigator.clipboard) continue;
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'code-copy';
+      button.setAttribute('aria-label', label.copyLabel ?? 'Copy');
+      const text = document.createElement('span');
+      text.textContent = label.copy ?? 'Copy';
+      const icon = document.createElement('span');
+      icon.style.display = 'inline-flex';
+      icon.innerHTML = copyIcon;
+      button.append(icon, text);
+      button.addEventListener('click', async () => {
+        const lines = [...code.querySelectorAll<HTMLElement>('.line')]
+          .filter((line) => !line.classList.contains('remove'))
+          .map((line) => line.textContent ?? '');
+        await navigator.clipboard.writeText(lines.join('\n').replace(/\n+$/, ''));
+        button.dataset.copied = '';
+        text.textContent = label.copied ?? 'Copied';
+        icon.innerHTML = checkIcon;
+        window.setTimeout(() => {
+          delete button.dataset.copied;
+          text.textContent = label.copy ?? 'Copy';
+          icon.innerHTML = copyIcon;
+        }, 1600);
+      });
+      caption.append(button);
+    }
+
+    // Figures scale down to the column; on a phone a chart's labels can get too small, so every
+    // in-body image opens at full size.
+    for (const img of body.querySelectorAll<HTMLImageElement>('img')) {
+      if (img.closest('a')) continue;
+      const link = document.createElement('a');
+      link.className = 'figure-link';
+      link.href = img.currentSrc || img.src;
+      link.target = '_blank';
+      link.rel = 'noopener';
+      link.setAttribute('aria-label', `${img.alt ? `${img.alt} — ` : ''}${label.imageFull ?? ''}`);
+      img.replaceWith(link);
+      link.append(img);
+    }
+
+    // The Markdown processor labels footnotes in English for every page; localise them here.
+    const footnoteLabel = body.querySelector('#footnote-label');
+    if (footnoteLabel && label.footnotesLabel) footnoteLabel.textContent = label.footnotesLabel;
+    for (const back of body.querySelectorAll<HTMLElement>('[data-footnote-backref]')) {
+      if (label.backrefLabel) back.setAttribute('aria-label', label.backrefLabel);
+    }
+
+    for (const heading of body.querySelectorAll<HTMLElement>('h2[id]:not(#footnote-label), h3[id], h4[id]')) {
+      const anchor = document.createElement('a');
+      anchor.className = 'heading-anchor';
+      anchor.href = `#${heading.id}`;
+      anchor.setAttribute('aria-label', label.anchorLabel ?? 'Link to this heading');
+      anchor.textContent = '#';
+      heading.prepend(anchor);
+    }
+  }
+</script>
+
+<style>
+  .post-grid {
+    display: grid;
+    grid-template-columns:
+      minmax(var(--gutter), 1fr)
+      minmax(0, var(--col))
+      minmax(var(--gutter), 1fr);
+    margin-top: 72px;
+  }
+  .post {
+    grid-column: 2;
+    min-width: 0;
+  }
+  .post-rail {
+    grid-column: 3;
+    max-width: calc(var(--rail) + var(--rail-gap));
+    padding-left: var(--rail-gap);
+  }
+
+  .post__title {
+    font-size: 32px;
+    font-weight: 700;
+    line-height: 1.3;
+    letter-spacing: -0.02em;
+  }
+  .post__meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    row-gap: 4px;
+    margin-top: 14px;
+    font-size: 14px;
+    color: var(--ink-faint);
+  }
+  /* Each separator trails the item before it, so a wrapped line never starts with a dot. */
+  .post__meta > * {
+    white-space: nowrap;
+  }
+  .post__meta > :not(:last-child)::after {
+    content: '·';
+    margin: 0 9px;
+    color: var(--rule-strong);
+  }
+  .post__meta time {
+    font-family: var(--font-mono);
+    font-size: 13px;
+  }
+  .post__meta a {
+    color: var(--ink-muted);
+    text-decoration: none;
+  }
+  .post__meta a:hover {
+    color: var(--accent);
+    text-decoration: underline;
+  }
+  .post__topics {
+    display: inline;
+  }
+  .post__langs {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .post__langs > :global(svg) {
+    color: var(--ink-faint);
+  }
+  .post__lang-current {
+    color: var(--heading);
+    font-weight: 600;
+  }
+  .post__lang-current:not(:last-child)::after {
+    content: '·';
+    margin-left: 6px;
+    color: var(--rule-strong);
+  }
+
+  .post__thumb {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    margin-top: 32px;
+    border-radius: 10px;
+    border: 1px solid var(--rule);
+  }
+  .post__body {
+    margin-top: 40px;
+  }
+
+  .post__footer {
+    display: grid;
+    gap: 18px;
+    margin-top: 64px;
+    padding-top: 24px;
+    border-top: 1px solid var(--rule);
+  }
+  .post__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 14px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    font-size: 14px;
+  }
+  .post__tags a {
+    color: var(--ink-muted);
+    text-decoration: none;
+  }
+  .post__tags a:hover {
+    color: var(--accent);
+  }
+  .post__author {
+    font-size: 14px;
+    color: var(--ink-faint);
+  }
+  .post__author a {
+    color: var(--heading);
+    font-weight: 600;
+    text-decoration: none;
+  }
+  .post__author a:hover {
+    color: var(--accent);
+  }
+
+  .related {
+    margin-top: 88px;
+  }
+  .related .section-heading {
+    margin-bottom: 14px;
+  }
+
+  @media (max-width: 1259px) {
+    .post-rail {
+      grid-column: 2;
+      max-width: none;
+      padding-left: 0;
+    }
+  }
+  @media (max-width: 640px) {
+    .post-grid {
+      margin-top: 40px;
+    }
+    .post__title {
+      font-size: 27px;
+    }
+    .post__thumb {
+      margin-top: 24px;
+    }
+    .post__body {
+      margin-top: 28px;
+    }
+  }
+</style>

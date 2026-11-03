@@ -1,0 +1,199 @@
+---
+/**
+ * Shared list page: all posts grouped by year, or one topic / one tag.
+ */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Icon from '../components/Icon.astro';
+import PostList from '../components/PostList.astro';
+import type { NavKey } from '../components/Header.astro';
+import { href, topicName, ui } from '../lib/i18n';
+import { getPosts, postsByTopic, type Post } from '../lib/posts';
+import { groupByYear } from '../lib/text';
+import { TOPICS, type Lang, type Topic } from '../site.config';
+
+interface Props {
+  lang: Lang;
+  title: string;
+  posts: Post[];
+  /** Path of this page within its language, e.g. "posts" or "topics/backend". */
+  path: string;
+  /** Path of the same page in the other language, when it exists there. */
+  otherPath?: string;
+  /** Show the topic filter row (the all-posts page). */
+  filters?: boolean;
+  activeTopic?: Topic;
+  backToAll?: boolean;
+  nav?: NavKey;
+}
+
+const { lang, title, posts, path, otherPath, filters = false, activeTopic, backToAll = false, nav = 'posts' } = Astro.props;
+const t = ui(lang);
+const other = lang === 'ko' ? 'en' : 'ko';
+const groups = groupByYear(posts, (p) => p.data.date);
+const all = filters || activeTopic ? await getPosts(lang) : [];
+const topicCounts = TOPICS.map((topic) => ({ topic, count: postsByTopic(all, topic).length })).filter((x) => x.count > 0);
+---
+
+<BaseLayout
+  lang={lang}
+  title={title}
+  nav={nav}
+  alternates={{ [lang]: href(lang, path), ...(otherPath ? { [other]: href(other, otherPath) } : {}) }}
+>
+  <div class="wrap list-page">
+    <header class="list-head">
+      {
+        backToAll && (
+          <a class="back-link" href={href(lang, 'posts')}>
+            <Icon name="arrowLeft" size={14} />
+            {t.allPosts}
+          </a>
+        )
+      }
+      <h1 class="page-title">{title}</h1>
+      <p class="list-head__count num">{t.postCount(posts.length)}</p>
+    </header>
+
+    {
+      topicCounts.length > 0 && (
+        <nav class="topic-filter" aria-label={t.topics}>
+          <ul>
+            <li>
+              <a href={href(lang, 'posts')} aria-current={!activeTopic ? 'page' : undefined}>
+                {t.allPosts}
+              </a>
+            </li>
+            {topicCounts.map(({ topic, count }) => (
+              <li>
+                <a href={href(lang, `topics/${topic}`)} aria-current={activeTopic === topic ? 'page' : undefined}>
+                  {topicName(lang, topic)} <span class="num">{count}</span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </nav>
+      )
+    }
+
+    {
+      posts.length === 0 ? (
+        <div class="empty">
+          <p class="empty__title">{t.noPosts}</p>
+          <p class="empty__hint">{t.noPostsHint}</p>
+          <a class="empty__link" href={href(lang)}>
+            {t.home} <Icon name="arrowRight" size={14} />
+          </a>
+        </div>
+      ) : (
+        groups.map(({ year, items }) => (
+          <section class="year" aria-labelledby={`y${year}`}>
+            <h2 id={`y${year}`} class="year__title num">
+              {year}
+            </h2>
+            <PostList lang={lang} posts={items} />
+          </section>
+        ))
+      )
+    }
+  </div>
+</BaseLayout>
+
+<style>
+  .list-head {
+    padding-top: 72px;
+  }
+  .back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 12px;
+    font-size: 14px;
+    color: var(--ink-muted);
+    text-decoration: none;
+  }
+  .back-link:hover {
+    color: var(--accent);
+  }
+  .list-head__count {
+    margin-top: 8px;
+    font-size: 14px;
+    color: var(--ink-faint);
+  }
+
+  .topic-filter ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 32px 0 0;
+    padding: 0;
+    list-style: none;
+  }
+  .topic-filter a {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    height: 32px;
+    padding: 0 12px;
+    border: 1px solid var(--rule-strong);
+    border-radius: 999px;
+    font-size: 14px;
+    color: var(--ink-muted);
+    text-decoration: none;
+    transition: border-color 120ms ease-out, color 120ms ease-out;
+  }
+  .topic-filter a:hover {
+    border-color: var(--ink-faint);
+    color: var(--heading);
+  }
+  .topic-filter a[aria-current='page'] {
+    border-color: var(--heading);
+    background: var(--heading);
+    color: var(--bg);
+  }
+  .topic-filter .num {
+    font-size: 12.5px;
+    opacity: 0.8;
+  }
+
+  .year {
+    margin-top: 56px;
+  }
+  .year__title {
+    margin-bottom: 12px;
+    font-family: var(--font-mono);
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--ink-faint);
+  }
+
+  .empty {
+    margin-top: 40px;
+    padding: 28px 0;
+    border-top: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+  }
+  .empty__title {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--heading);
+  }
+  .empty__hint {
+    margin-top: 6px;
+    font-size: 14.5px;
+    color: var(--ink-faint);
+  }
+  .empty__link {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    margin-top: 14px;
+    font-size: 14px;
+    color: var(--ink-muted);
+  }
+
+  @media (max-width: 640px) {
+    .list-head {
+      padding-top: 40px;
+    }
+  }
+</style>

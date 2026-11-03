@@ -1,0 +1,135 @@
+---
+import { Image } from 'astro:assets';
+import { href } from '../lib/i18n';
+import { slugOf, type Post } from '../lib/posts';
+import { isoDate } from '../lib/text';
+import type { Lang } from '../site.config';
+
+interface Props {
+  lang: Lang;
+  posts: Post[];
+  /** Heading level for each post title, so lists sit correctly under their section heading. */
+  level?: 'h2' | 'h3';
+  thumbnails?: boolean;
+  compact?: boolean;
+}
+
+const { lang, posts, level = 'h3', thumbnails = true, compact = false } = Astro.props;
+const Title = level;
+---
+
+<ol class:list={['post-list', { 'post-list--compact': compact }]}>
+  {
+    posts.map((post) => (
+      <li class="post-row">
+        <time class="post-row__date" datetime={isoDate(post.data.date)}>
+          {isoDate(post.data.date)}
+        </time>
+        <div class="post-row__body">
+          <Title class="post-row__title">
+            <a href={href(lang, `posts/${slugOf(post)}`)}>{post.data.title}</a>
+          </Title>
+          {!compact && <p class="post-row__desc">{post.data.description}</p>}
+        </div>
+        {thumbnails && !compact && post.data.thumbnail && (
+          <Image class="post-row__thumb" src={post.data.thumbnail} alt="" width={224} height={126} loading="lazy" />
+        )}
+      </li>
+    ))
+  }
+</ol>
+
+<style>
+  .post-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border-top: 1px solid var(--rule);
+  }
+  .post-row {
+    position: relative;
+    display: grid;
+    grid-template-columns: 104px minmax(0, 1fr) auto;
+    gap: 6px 24px;
+    align-items: start;
+    padding: 22px 0;
+    border-bottom: 1px solid var(--rule);
+  }
+  .post-row__date {
+    padding-top: 3px;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: var(--ink-faint);
+    white-space: nowrap;
+  }
+  .post-row__title {
+    font-size: 17px;
+    font-weight: 600;
+    line-height: 1.45;
+    letter-spacing: -0.01em;
+  }
+  .post-row__title a {
+    text-decoration: none;
+    color: var(--heading);
+    transition: color 120ms ease-out;
+  }
+  /* The title link covers the whole row; only the title is announced. */
+  .post-row__title a::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+  }
+  .post-row:hover .post-row__title a {
+    color: var(--accent);
+  }
+  .post-row__desc {
+    margin-top: 6px;
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--ink-muted);
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .post-row__thumb {
+    width: 112px;
+    height: 63px;
+    object-fit: cover;
+    border-radius: 6px;
+    border: 1px solid var(--rule);
+  }
+
+  .post-list--compact .post-row {
+    padding: 14px 0;
+  }
+  .post-list--compact .post-row__title {
+    font-size: 16px;
+    font-weight: 500;
+  }
+
+  @media (max-width: 640px) {
+    /* The date follows the title on narrow screens; it never sits above it as a label. */
+    .post-row {
+      grid-template-columns: minmax(0, 1fr) auto;
+      grid-template-areas:
+        'body thumb'
+        'date date';
+    }
+    .post-row__body {
+      grid-area: body;
+    }
+    .post-row__thumb {
+      grid-area: thumb;
+    }
+    .post-row__date {
+      grid-area: date;
+      padding-top: 0;
+      font-size: 12.5px;
+    }
+    .post-row__thumb {
+      width: 88px;
+      height: 50px;
+    }
+  }
+</style>

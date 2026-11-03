@@ -1,0 +1,427 @@
+---
+import { getEntry } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Icon from '../components/Icon.astro';
+import { href, ui } from '../lib/i18n';
+import { SHOW_DRAFTS } from '../lib/posts';
+import { otherLang } from '../lib/text';
+import type { Lang } from '../site.config';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = ui(lang);
+const s = t.resumeSections;
+const other = otherLang(lang);
+// QA builds render the labelled fixture so every section can be reviewed before real data exists.
+const entry = (SHOW_DRAFTS && (await getEntry('resume', `fixture-${lang}`))) || (await getEntry('resume', lang));
+if (!entry) throw new Error(`Missing src/content/resume/${lang}.yaml`);
+const r = entry.data;
+const hasSections = [r.experience, r.projects, r.openSource, r.talks, r.publications, r.skills, r.education].some(
+  (list) => list.length > 0,
+);
+const period = (p: { start: string; end?: string }) => (p.end === p.start ? p.start : `${p.start} – ${p.end ?? t.present}`);
+const host = (url: string) => url.replace(/^https?:\/\//, '').replace(/\/$/, '');
+---
+
+<BaseLayout
+  lang={lang}
+  title={t.resume}
+  description={r.profile.summary ?? r.profile.role}
+  alternates={{ ko: href('ko', 'resume'), en: href('en', 'resume') }}
+  bare
+>
+  <div class="resume-bar">
+    <a class="resume-bar__back" href={href(lang)}><Icon name="arrowLeft" size={14} /> {t.backToSite}</a>
+    <span class="resume-bar__tools">
+      <a href={href(other, 'resume')} hreflang={other} lang={other}>{ui(other).langName}</a>
+      <button class="js-only" type="button" data-print>{t.print}</button>
+    </span>
+  </div>
+
+  <main class="resume" id="main">
+    <header class="resume__head">
+      <h1 class="resume__name">{r.profile.name}</h1>
+      {r.profile.role && <p class="resume__role">{r.profile.role}</p>}
+      {r.profile.summary && <p class="resume__summary">{r.profile.summary}</p>}
+      {
+        r.profile.links.length > 0 && (
+          <ul class="resume__links">
+            {r.profile.links.map((l) => (
+              <li>
+                <a href={l.url}>{l.label || host(l.url)}</a>
+              </li>
+            ))}
+          </ul>
+        )
+      }
+    </header>
+
+    {!hasSections && <p class="resume__pending">{t.resumePending}</p>}
+
+    {
+      r.experience.length > 0 && (
+        <section class="block" aria-labelledby="r-exp">
+          <h2 id="r-exp">{s.experience}</h2>
+          <ol class="entries">
+            {r.experience.map((e) => (
+              <li class="entry">
+                <p class="entry__when">{period(e.period)}</p>
+                <div class="entry__what">
+                  <h3>{e.url ? <a href={e.url}>{e.company}</a> : e.company}</h3>
+                  <p class="entry__sub">{e.role}</p>
+                  {e.summary && <p class="entry__text">{e.summary}</p>}
+                  {e.highlights.length > 0 && (
+                    <ul class="entry__points">
+                      {e.highlights.map((h) => (
+                        <li>{h}</li>
+                      ))}
+                    </ul>
+                  )}
+                  {e.stack.length > 0 && <p class="entry__stack">{e.stack.join(', ')}</p>}
+                </div>
+              </li>
+            ))}
+          </ol>
+        </section>
+      )
+    }
+
+    {
+      r.projects.length > 0 && (
+        <section class="block" aria-labelledby="r-proj">
+          <h2 id="r-proj">{s.projects}</h2>
+          <ol class="entries">
+            {r.projects.map((p) => (
+              <li class="entry">
+                <p class="entry__when">{p.period ? period(p.period) : ''}</p>
+                <div class="entry__what">
+                  <h3>{p.url ? <a href={p.url}>{p.name}</a> : p.name}</h3>
+                  <p class="entry__text">{p.description}</p>
+                  {p.stack.length > 0 && <p class="entry__stack">{p.stack.join(', ')}</p>}
+                </div>
+              </li>
+            ))}
+          </ol>
+        </section>
+      )
+    }
+
+    {
+      r.openSource.length > 0 && (
+        <section class="block" aria-labelledby="r-oss">
+          <h2 id="r-oss">{s.openSource}</h2>
+          <ol class="entries entries--tight">
+            {r.openSource.map((o) => (
+              <li class="entry">
+                <p class="entry__when" aria-hidden="true" />
+                <div class="entry__what">
+                  <h3>
+                    <a href={o.url}>{o.name}</a>
+                  </h3>
+                  <p class="entry__sub entry__mono">{host(o.url)}</p>
+                  {o.description && <p class="entry__text">{o.description}</p>}
+                </div>
+              </li>
+            ))}
+          </ol>
+        </section>
+      )
+    }
+
+    {
+      r.talks.length > 0 && (
+        <section class="block" aria-labelledby="r-talks">
+          <h2 id="r-talks">{s.talks}</h2>
+          <ol class="entries entries--tight">
+            {r.talks.map((k) => (
+              <li class="entry">
+                <p class="entry__when">{k.date}</p>
+                <div class="entry__what">
+                  <h3>{k.url ? <a href={k.url}>{k.title}</a> : k.title}</h3>
+                  <p class="entry__sub">{k.event}</p>
+                </div>
+              </li>
+            ))}
+          </ol>
+        </section>
+      )
+    }
+
+    {
+      r.publications.length > 0 && (
+        <section class="block" aria-labelledby="r-pub">
+          <h2 id="r-pub">{s.publications}</h2>
+          <ol class="entries entries--tight">
+            {r.publications.map((p) => (
+              <li class="entry">
+                <p class="entry__when">{p.year}</p>
+                <div class="entry__what">
+                  <h3>{p.url ? <a href={p.url}>{p.title}</a> : p.title}</h3>
+                  {p.note && <p class="entry__sub">{p.note}</p>}
+                </div>
+              </li>
+            ))}
+          </ol>
+        </section>
+      )
+    }
+
+    {
+      r.skills.length > 0 && (
+        <section class="block" aria-labelledby="r-skills">
+          <h2 id="r-skills">{s.skills}</h2>
+          <dl class="skills">
+            {r.skills.map((k) => (
+              <div class="entry">
+                <dt class="entry__when">{k.category}</dt>
+                <dd class="entry__what">{k.items.join(', ')}</dd>
+              </div>
+            ))}
+          </dl>
+        </section>
+      )
+    }
+
+    {
+      r.education.length > 0 && (
+        <section class="block" aria-labelledby="r-edu">
+          <h2 id="r-edu">{s.education}</h2>
+          <ol class="entries entries--tight">
+            {r.education.map((e) => (
+              <li class="entry">
+                <p class="entry__when">{period(e.period)}</p>
+                <div class="entry__what">
+                  <h3>{e.school}</h3>
+                  {e.detail && <p class="entry__sub">{e.detail}</p>}
+                </div>
+              </li>
+            ))}
+          </ol>
+        </section>
+      )
+    }
+  </main>
+</BaseLayout>
+
+<script>
+  document.querySelector('[data-print]')?.addEventListener('click', () => window.print());
+</script>
+
+<style>
+  /* English follows kciter's all-mono résumé. Hangul falls back to a proportional face inside a mono
+     stack and inherits monospace word spaces, so Korean prose is set in the sans; data stays mono. */
+  :global(body) {
+    font-family: var(--font-mono);
+    font-size: 13.5px;
+    line-height: 1.7;
+    color: var(--ink-muted);
+  }
+  :global(html[lang='ko'] body) {
+    font-family: var(--font-sans);
+    font-size: 14.5px;
+  }
+  .resume__name,
+  .entry__when,
+  .entry__stack,
+  .entry__mono,
+  .resume__links {
+    font-family: var(--font-mono);
+    font-size: 13.5px;
+  }
+
+  .resume-bar {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    width: min(100% - 2 * var(--gutter), 800px);
+    margin: 0 auto;
+    padding: 24px 0 0;
+    font-family: var(--font-sans);
+    font-size: 13.5px;
+  }
+  .resume-bar a,
+  .resume-bar button {
+    color: var(--ink-muted);
+    text-decoration: none;
+  }
+  .resume-bar a:hover,
+  .resume-bar button:hover {
+    color: var(--accent);
+  }
+  .resume-bar__back {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .resume-bar__tools {
+    display: flex;
+    gap: 16px;
+  }
+  .resume__pending {
+    max-width: 60ch;
+    margin-top: 48px;
+    padding-top: 18px;
+    border-top: 1px solid var(--rule);
+    font-family: var(--font-sans);
+    font-size: 15px;
+    color: var(--ink-muted);
+  }
+  .resume-bar button {
+    padding: 0;
+    border: 0;
+    background: none;
+    cursor: pointer;
+  }
+
+  .resume {
+    width: min(100% - 2 * var(--gutter), 800px);
+    margin: 0 auto;
+    padding: 64px 0 96px;
+  }
+  .resume__name {
+    font-size: 44px;
+    font-weight: 700;
+    line-height: 1.1;
+    letter-spacing: -0.04em;
+    color: var(--heading);
+  }
+  .resume__role {
+    margin-top: 10px;
+    font-size: 15px;
+    color: var(--ink);
+  }
+  .resume__summary {
+    max-width: 60ch;
+    margin-top: 14px;
+  }
+  .resume__links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 18px;
+    margin: 18px 0 0;
+    padding: 0;
+    list-style: none;
+  }
+  .resume__links a,
+  .entry__what a {
+    color: var(--heading);
+    text-decoration-color: var(--rule-strong);
+  }
+  .resume__links a:hover,
+  .entry__what a:hover {
+    color: var(--accent);
+    text-decoration-color: currentColor;
+  }
+
+  .block {
+    margin-top: 56px;
+  }
+  .block h2 {
+    margin-bottom: 18px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--rule);
+    font-size: 14.5px;
+    font-weight: 700;
+    color: var(--heading);
+  }
+  .entries,
+  .skills {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .entry {
+    display: grid;
+    grid-template-columns: 150px minmax(0, 1fr);
+    gap: 4px 24px;
+    padding: 10px 0;
+    break-inside: avoid;
+  }
+  .entries--tight .entry,
+  .skills .entry {
+    padding: 4px 0;
+  }
+  .entry__when {
+    margin: 0;
+    color: var(--ink-faint);
+  }
+  .entry__what {
+    margin: 0;
+    min-width: 0;
+  }
+  .entry h3 {
+    font-size: inherit;
+    font-weight: 700;
+    color: var(--heading);
+  }
+  .entry__sub,
+  .entry__stack {
+    color: var(--ink-faint);
+  }
+  .entry__text {
+    margin-top: 4px;
+    color: var(--ink);
+  }
+  .entry__points {
+    margin: 6px 0 0;
+    padding-left: 1.2em;
+    color: var(--ink);
+  }
+  .entry__stack {
+    margin-top: 4px;
+  }
+
+  @media (max-width: 640px) {
+    .resume {
+      padding-top: 40px;
+    }
+    .resume__name {
+      font-size: 34px;
+    }
+    .entry {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+
+  @media print {
+    @page {
+      margin: 16mm 14mm;
+    }
+    :global(:root) {
+      --bg: #fff;
+      --ink: #111;
+      --heading: #000;
+      --ink-muted: #333;
+      --ink-faint: #555;
+      --rule: #ccc;
+      --rule-strong: #999;
+    }
+    :global(body) {
+      font-size: 10pt;
+      background: #fff;
+    }
+    .resume-bar {
+      display: none;
+    }
+    .resume {
+      width: auto;
+      padding: 0;
+    }
+    .resume__name {
+      font-size: 26pt;
+    }
+    .block {
+      margin-top: 18pt;
+      break-inside: auto;
+    }
+    .block h2 {
+      break-after: avoid;
+    }
+    a {
+      text-decoration: none;
+    }
+  }
+</style>

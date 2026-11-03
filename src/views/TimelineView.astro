@@ -1,0 +1,218 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Icon from '../components/Icon.astro';
+import { href, kindName, topicName, ui, type TimelineKind } from '../lib/i18n';
+import { getPosts, slugOf } from '../lib/posts';
+import { groupByYear, isoDate } from '../lib/text';
+import type { Lang, Topic } from '../site.config';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = ui(lang);
+
+interface Item {
+  date: Date;
+  kind: TimelineKind;
+  title: string;
+  url?: string;
+  external?: boolean;
+  description?: string;
+  /** Posts show their topics; other entries show what kind of event they are. */
+  topics?: readonly Topic[];
+  Content?: Awaited<ReturnType<typeof render>>['Content'];
+}
+
+const posts = await getPosts(lang);
+const entries = (await getCollection('timeline')).filter((e) => e.id.endsWith(`/${lang}`));
+
+const items: Item[] = [
+  ...posts.map((p) => ({
+    date: p.data.date,
+    kind: 'post' as const,
+    title: p.data.title,
+    url: href(lang, `posts/${slugOf(p)}`),
+    description: p.data.description,
+    topics: p.data.topics,
+  })),
+  ...(await Promise.all(
+    entries.map(async (e) => ({
+      date: e.data.date,
+      kind: e.data.kind,
+      title: e.data.title,
+      url: e.data.link,
+      external: Boolean(e.data.link),
+      Content: (await render(e)).Content,
+    })),
+  )),
+];
+
+const groups = groupByYear(items, (i) => i.date);
+---
+
+<BaseLayout lang={lang} title={t.timeline} nav="timeline" alternates={{ ko: href('ko', 'timeline'), en: href('en', 'timeline') }}>
+  <div class="wrap">
+    <header class="tl-head">
+      <h1 class="page-title">{t.timeline}</h1>
+    </header>
+
+    {
+      items.length === 0 ? (
+        <div class="empty">
+          <p class="empty__title">{t.noTimeline}</p>
+          <p class="empty__hint">{t.noPostsHint}</p>
+        </div>
+      ) : (
+        groups.map(({ year, items }) => (
+          <section class="tl-year" aria-labelledby={`tl-${year}`}>
+            <h2 id={`tl-${year}`} class="tl-year__title num">
+              {year}
+            </h2>
+            <ol class="tl">
+              {items.map((item) => (
+                <li class:list={['tl__item', `tl__item--${item.kind}`]}>
+                  <h3 class="tl__title">
+                    {item.url ? (
+                      <a href={item.url} rel={item.external ? 'noopener' : undefined}>
+                        {item.title}
+                        {item.external && <Icon name="external" size={14} />}
+                      </a>
+                    ) : (
+                      item.title
+                    )}
+                  </h3>
+                  <p class="tl__meta">
+                    <time datetime={isoDate(item.date)}>{isoDate(item.date)}</time>
+                    <span>
+                      {item.topics
+                        ? item.topics.map((topic) => topicName(lang, topic)).join(', ')
+                        : kindName(lang, item.kind)}
+                    </span>
+                  </p>
+                  {item.description && <p class="tl__desc">{item.description}</p>}
+                  {item.Content && (
+                    <div class="tl__body">
+                      <item.Content />
+                    </div>
+                  )}
+                </li>
+              ))}
+            </ol>
+          </section>
+        ))
+      )
+    }
+  </div>
+</BaseLayout>
+
+<style>
+  .tl-head {
+    padding-top: 72px;
+  }
+  .tl-year {
+    margin-top: 56px;
+  }
+  .tl-year__title {
+    margin-bottom: 20px;
+    font-family: var(--font-mono);
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--ink-faint);
+  }
+  .tl {
+    margin: 0 0 0 5px;
+    padding: 0 0 0 28px;
+    list-style: none;
+    border-left: 1px solid var(--rule-strong);
+  }
+  .tl__item {
+    position: relative;
+    padding-bottom: 34px;
+  }
+  .tl__item:last-child {
+    padding-bottom: 4px;
+  }
+  .tl__item::before {
+    content: '';
+    position: absolute;
+    left: -33.5px;
+    top: 8px;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    border: 1.5px solid var(--ink-faint);
+    background: var(--bg);
+  }
+  .tl__item--post::before {
+    background: var(--ink-faint);
+  }
+  .tl__title {
+    font-size: 17px;
+    font-weight: 600;
+    line-height: 1.45;
+  }
+  .tl__title a {
+    color: var(--heading);
+    text-decoration: none;
+    transition: color 120ms ease-out;
+  }
+  .tl__title a:hover {
+    color: var(--accent);
+  }
+  .tl__title :global(svg) {
+    margin-left: 4px;
+    color: var(--ink-faint);
+  }
+  .tl__meta {
+    display: flex;
+    gap: 10px;
+    margin-top: 4px;
+    font-size: 13px;
+    color: var(--ink-faint);
+  }
+  .tl__meta time {
+    font-family: var(--font-mono);
+    font-size: 12.5px;
+  }
+  .tl__meta time::after {
+    content: '·';
+    margin-left: 10px;
+    color: var(--rule-strong);
+  }
+  .tl__desc,
+  .tl__body {
+    margin-top: 8px;
+    font-size: 15px;
+    line-height: 1.65;
+    color: var(--ink-muted);
+  }
+  .tl__body :global(p + p) {
+    margin-top: 0.6em;
+  }
+
+  .empty {
+    margin-top: 40px;
+    padding: 28px 0;
+    border-top: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+  }
+  .empty__title {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--heading);
+  }
+  .empty__hint {
+    margin-top: 6px;
+    font-size: 14.5px;
+    color: var(--ink-faint);
+  }
+
+  @media (max-width: 640px) {
+    .tl-head {
+      padding-top: 40px;
+    }
+  }
+</style>

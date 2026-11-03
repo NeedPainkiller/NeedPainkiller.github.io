@@ -1,0 +1,15 @@
+# Résumé data (English). Empty sections are not shown on the page.
+# Field reference: see the "Resume" section of AUTHORING.md.
+profile:
+  name: NeedPainkiller
+  links:
+    - label: github.com/NeedPainkiller
+      url: https://github.com/NeedPainkiller
+
+experience: []
+projects: []
+openSource: []
+talks: []
+publications: []
+skills: []
+education: []

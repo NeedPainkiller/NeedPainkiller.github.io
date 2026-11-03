@@ -1,0 +1,166 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Icon from '../components/Icon.astro';
+import PostList from '../components/PostList.astro';
+import { href, topicName, ui } from '../lib/i18n';
+import { getPosts, postsByTopic } from '../lib/posts';
+import { SITE, TOPICS, type Lang } from '../site.config';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = ui(lang);
+const posts = await getPosts(lang);
+const recent = posts.slice(0, 6);
+const topics = TOPICS.map((topic) => ({ topic, count: postsByTopic(posts, topic).length })).filter((x) => x.count > 0);
+---
+
+<BaseLayout lang={lang} nav="home" alternates={{ ko: href('ko'), en: href('en') }}>
+  <div class="wrap home">
+    {/* The header already carries the name and every link; the intro states what this is, once. */}
+    <section class="intro" aria-labelledby="intro-title">
+      <h1 id="intro-title" class="intro__statement">{SITE.description[lang]}</h1>
+    </section>
+
+    <section class="home-section" aria-labelledby="recent-title">
+      <div class="home-section__head">
+        <h2 id="recent-title" class="section-heading">{t.recentPosts}</h2>
+        {
+          posts.length > recent.length && (
+            <a class="more-link" href={href(lang, 'posts')}>
+              {t.allPosts} <Icon name="arrowRight" size={14} />
+            </a>
+          )
+        }
+      </div>
+      {
+        recent.length > 0 ? (
+          <PostList lang={lang} posts={recent} />
+        ) : (
+          <div class="empty">
+            <p class="empty__title">{t.noPosts}</p>
+            <p class="empty__hint">{t.noPostsHint}</p>
+          </div>
+        )
+      }
+    </section>
+
+    {
+      topics.length > 0 && (
+        <section class="home-section" aria-labelledby="topics-title">
+          <div class="home-section__head">
+            <h2 id="topics-title" class="section-heading">
+              {t.topics}
+            </h2>
+          </div>
+          <ul class="topic-list">
+            {topics.map(({ topic, count }) => (
+              <li>
+                <a href={href(lang, `topics/${topic}`)}>
+                  <span class="topic-list__name">{topicName(lang, topic)}</span>
+                  <span class="topic-list__count num">{t.postCount(count)}</span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )
+    }
+  </div>
+</BaseLayout>
+
+<style>
+  .intro {
+    padding-top: 88px;
+  }
+  .intro__statement {
+    max-width: 22em;
+    font-size: 28px;
+    font-weight: 600;
+    line-height: 1.45;
+    letter-spacing: -0.02em;
+  }
+
+  .home-section {
+    margin-top: 96px;
+  }
+  .home-section__head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: 14px;
+  }
+  .more-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 13.5px;
+    color: var(--ink-muted);
+    text-decoration: none;
+  }
+  .more-link:hover {
+    color: var(--accent);
+  }
+
+  .empty {
+    padding: 28px 0;
+    border-top: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+  }
+  .empty__title {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--heading);
+  }
+  .empty__hint {
+    margin-top: 6px;
+    font-size: 14.5px;
+    color: var(--ink-faint);
+  }
+
+  .topic-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    column-gap: 36px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    border-top: 1px solid var(--rule);
+  }
+  .topic-list a {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 16px 0;
+    border-bottom: 1px solid var(--rule);
+    text-decoration: none;
+  }
+  .topic-list__name {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--heading);
+    transition: color 120ms ease-out;
+  }
+  .topic-list a:hover .topic-list__name {
+    color: var(--accent);
+  }
+  .topic-list__count {
+    font-size: 13px;
+    color: var(--ink-faint);
+  }
+
+  @media (max-width: 640px) {
+    .intro {
+      padding-top: 48px;
+    }
+    .intro__statement {
+      font-size: 23px;
+    }
+    .home-section {
+      margin-top: 72px;
+    }
+  }
+</style>
