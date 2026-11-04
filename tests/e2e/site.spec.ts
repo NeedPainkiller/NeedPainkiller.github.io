@@ -45,6 +45,12 @@ test('search finds Korean text from the keyboard shortcut', async ({ page, isMob
   await expect(dialog).toBeHidden();
 });
 
+test('icon-only header controls keep an accessible name', async ({ page }) => {
+  await page.goto('');
+  await expect(page.getByRole('button', { name: '검색' })).toBeVisible();
+  await expect(page.getByRole('button', { name: '다크 모드 전환' })).toBeVisible();
+});
+
 test('the theme choice survives a reload', async ({ page }) => {
   await page.goto('');
   const before = await page.evaluate(() => matchMedia('(prefers-color-scheme: dark)').matches);

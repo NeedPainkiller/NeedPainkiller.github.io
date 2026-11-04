@@ -46,7 +46,15 @@ const items: { key: NavKey; label: string; path: string }[] = [
     </nav>
 
     <div class="site-tools">
-      <button class="search-trigger js-only" type="button" data-search-open aria-haspopup="dialog">
+      {/* The visible label is hidden on narrow screens, so the button carries its own name. */}
+      <button
+        class="search-trigger js-only"
+        type="button"
+        data-search-open
+        aria-haspopup="dialog"
+        aria-label={t.search}
+        aria-keyshortcuts="Control+K Meta+K"
+      >
         <Icon name="search" size={15} />
         <span class="search-trigger__label">{t.search}</span>
         <kbd class="search-trigger__kbd" data-search-kbd>⌘K</kbd>
