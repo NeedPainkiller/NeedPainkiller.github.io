@@ -6,9 +6,12 @@ const POST = 'posts/kitchen-sink/';
 test('home links to both languages and every main section', async ({ page }) => {
   await page.goto('');
   await expect(page.locator('html')).toHaveAttribute('lang', 'ko');
-  await expect(page.locator('link[rel="alternate"][hreflang="en"]')).toHaveAttribute('href', /\/my-blog\/en\/$/);
+  await expect(page.locator('link[rel="alternate"][hreflang="en"]')).toHaveAttribute(
+    'href',
+    'https://needpainkiller.github.io/en/',
+  );
   for (const path of ['posts/', 'timeline/', 'about/', 'resume/']) {
-    await expect(page.locator(`a[href="/my-blog/${path}"]`).first()).toBeAttached();
+    await expect(page.locator(`a[href="/${path}"]`).first()).toBeAttached();
   }
 });
 

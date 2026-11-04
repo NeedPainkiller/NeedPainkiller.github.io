@@ -18,7 +18,7 @@ src/content/posts/<slug>/
    # --lang: ko | en | both, --topic: backend | frontend | infra | ai
    ```
 
-2. `npm run dev`로 띄우고 `http://localhost:4321/my-blog/`에서 확인합니다. dev에서는 `draft: true` 글도 보입니다.
+2. `npm run dev`로 띄우고 `http://localhost:4321/`에서 확인합니다. dev에서는 `draft: true` 글도 보입니다.
 3. 다 쓰면 `draft: false`로 바꾸고 커밋 → `main`에 push. 몇 분 뒤 배포됩니다.
 
 ## frontmatter
@@ -110,7 +110,7 @@ Resume 페이지의 "인쇄 · PDF로 저장"은 브라우저 인쇄용으로 �
 
 1. **GitHub Pages**: 저장소 Settings → Pages → Source를 **GitHub Actions**로.
 2. **giscus 댓글** (선택): 저장소를 공개로 두고 Settings → Features에서 **Discussions**를 켠 뒤 [giscus 앱](https://github.com/apps/giscus)을 설치합니다. [giscus.app](https://giscus.app)에서 받은 `repoId`, `categoryId`를 `src/site.config.ts`의 `giscus`에 넣으면 댓글이 나타납니다. 비워 두면 댓글 영역은 숨겨집니다.
-3. **커스텀 도메인** (나중에): `src/site.config.ts`의 `origin`을 도메인으로, `base`를 `'/'`로 바꾸고 `public/CNAME`을 추가합니다.
+3. **커스텀 도메인** (나중에): `src/site.config.ts`의 `origin`을 도메인으로 바꾸고 `public/CNAME`을 추가합니다. 사이트는 이미 루트(`base: '/'`)에 있습니다.
 
 ## 아직 채울 것
 

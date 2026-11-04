@@ -11,7 +11,7 @@ web
 Astro static site. Posts and pages are Markdown (MDX only when a post needs an interactive demo) stored in this repository and versioned with git. There is no database. The build outputs plain static HTML/CSS plus small progressive-enhancement scripts.
 
 - History: the author first chose plain hand-written HTML/CSS. On 2026-11-03 they required posts to live as Markdown files in git, which needs a build step, and chose Astro (the stack both reference sites use).
-- Hosting: GitHub Pages via GitHub Actions, served at `https://needpainkiller.github.io/my-blog/` (base path `/my-blog/`). A custom domain may come later; the base path is configured in one place.
+- Hosting: GitHub Pages via GitHub Actions from the user-site repository `NeedPainkiller/NeedPainkiller.github.io` (renamed from `my-blog` on 2026-11-04), served at the domain root `https://needpainkiller.github.io/` (base path `/`), so root-level files such as robots.txt take effect. A custom domain may come later; origin and base are configured in one place.
 - JavaScript is allowed only for progressive enhancement: search, theme toggle, code copy, table-of-contents state, comments. Every page reads correctly without it.
 
 ## Users

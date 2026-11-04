@@ -15,7 +15,7 @@ Developers arriving from search on one post want the answer and runnable code fa
 
 ## Constraints
 
-Astro 7 static output under base /my-blog/. Content is Markdown in git; no fabricated posts, metrics or résumé facts. WCAG 2.2 AA including meta text and labels. Pages read correctly without JavaScript. Quality bar: kciter.so and gwagjiug.com; their identity marks are never copied.
+Astro 7 static output at the domain root (base /). Content is Markdown in git; no fabricated posts, metrics or résumé facts. WCAG 2.2 AA including meta text and labels. Pages read correctly without JavaScript. Quality bar: kciter.so and gwagjiug.com; their identity marks are never copied.
 
 ## Direction contract
 

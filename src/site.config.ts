@@ -5,8 +5,8 @@
 export const SITE = {
   name: 'NeedPainkiller',
   origin: 'https://needpainkiller.github.io',
-  base: '/my-blog',
-  repo: 'https://github.com/NeedPainkiller/my-blog',
+  base: '/',
+  repo: 'https://github.com/NeedPainkiller/NeedPainkiller.github.io',
   defaultLang: 'ko',
   description: {
     ko: 'NeedPainkiller의 개발 노트. 백엔드, 프론트엔드, 인프라, AI를 다룹니다.',
@@ -22,7 +22,7 @@ export const SITE = {
    * section is not rendered.
    */
   giscus: {
-    repo: 'NeedPainkiller/my-blog',
+    repo: 'NeedPainkiller/NeedPainkiller.github.io',
     repoId: '',
     category: 'Comments',
     categoryId: '',

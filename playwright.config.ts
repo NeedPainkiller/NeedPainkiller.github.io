@@ -13,7 +13,7 @@ export default defineConfig({
   fullyParallel: true,
   reporter: 'list',
   use: {
-    baseURL: `http://127.0.0.1:${PORT}/my-blog/`,
+    baseURL: `http://127.0.0.1:${PORT}/`,
     channel,
   },
   projects: [
@@ -22,7 +22,7 @@ export default defineConfig({
   ],
   webServer: {
     command: `npx astro preview --port ${PORT} --host 127.0.0.1`,
-    url: `http://127.0.0.1:${PORT}/my-blog/`,
+    url: `http://127.0.0.1:${PORT}/`,
     reuseExistingServer: !process.env.CI,
   },
 });
