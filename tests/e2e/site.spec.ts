@@ -69,6 +69,21 @@ test('the résumé shows sections with data and hides empty ones', async ({ page
   await expect(page.locator('#r-pub')).toHaveCount(0);
 });
 
+test('posts carry structured data and llms.txt lists them', async ({ page, request }) => {
+  await page.goto(POST);
+  const data = JSON.parse((await page.locator('script[type="application/ld+json"]').textContent()) ?? '{}');
+  const nodes = data['@graph'] as Record<string, unknown>[];
+  expect(nodes.map((n) => n['@type'])).toEqual(['BlogPosting', 'BreadcrumbList']);
+  expect(nodes[0]!.headline).toBe((await page.locator('h1').textContent())?.trim());
+  expect(nodes[0]!.workTranslation).toMatchObject({ url: 'https://needpainkiller.github.io/en/posts/kitchen-sink/' });
+
+  const llms = await (await request.get('llms.txt')).text();
+  expect(llms.startsWith('# NeedPainkiller')).toBe(true);
+  expect(llms).toContain('https://needpainkiller.github.io/posts/kitchen-sink/');
+  const full = await (await request.get('llms-full.txt')).text();
+  expect(full).toContain('HikariCP');
+});
+
 test('every post ends with a next read, related or recent', async ({ page }) => {
   await page.goto(POST);
   await expect(page.locator('#related-title')).toHaveText('함께 읽기');

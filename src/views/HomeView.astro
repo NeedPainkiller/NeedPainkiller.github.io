@@ -2,8 +2,9 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Icon from '../components/Icon.astro';
 import PostList from '../components/PostList.astro';
-import { href, topicName, ui } from '../lib/i18n';
+import { absolute, href, topicName, ui } from '../lib/i18n';
 import { getPosts, postsByTopic } from '../lib/posts';
+import { graph, personLd, websiteLd } from '../lib/structured-data';
 import { SITE, TOPICS, type Lang } from '../site.config';
 
 interface Props {
@@ -15,9 +16,10 @@ const t = ui(lang);
 const posts = await getPosts(lang);
 const recent = posts.slice(0, 6);
 const topics = TOPICS.map((topic) => ({ topic, count: postsByTopic(posts, topic).length })).filter((x) => x.count > 0);
+const jsonLd = graph(websiteLd(absolute(href('ko'))), personLd(absolute(href(lang, 'about'))));
 ---
 
-<BaseLayout lang={lang} nav="home" alternates={{ ko: href('ko'), en: href('en') }}>
+<BaseLayout lang={lang} nav="home" alternates={{ ko: href('ko'), en: href('en') }} jsonLd={jsonLd}>
   <div class="wrap home">
     {/* The header already carries the name and every link; the intro states what this is, once. */}
     <section class="intro" aria-labelledby="intro-title">

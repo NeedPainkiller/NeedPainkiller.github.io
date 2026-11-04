@@ -6,7 +6,8 @@ import Giscus from '../components/Giscus.astro';
 import Icon from '../components/Icon.astro';
 import PostList from '../components/PostList.astro';
 import Toc from '../components/Toc.astro';
-import { href, topicName, ui } from '../lib/i18n';
+import { absolute, asset, href, topicName, ui } from '../lib/i18n';
+import { blogPostingLd, breadcrumbLd, graph } from '../lib/structured-data';
 import { getPosts, getTranslation, langOf, minutesOf, relatedPosts, slugOf, type Post } from '../lib/posts';
 import { isoDate, otherLang, tagSlug } from '../lib/text';
 import { SITE } from '../site.config';
@@ -33,6 +34,27 @@ const alternates = {
   [lang]: href(lang, `posts/${slug}`),
   ...(translation ? { [other]: href(other, `posts/${slug}`) } : {}),
 };
+
+const url = absolute(href(lang, `posts/${slug}`));
+const jsonLd = graph(
+  blogPostingLd({
+    url,
+    lang,
+    title,
+    description,
+    published: date,
+    modified: updated,
+    image: absolute(thumbnail?.src ?? asset('og-default.png')),
+    topics: topics.map((topic) => topicName(lang, topic)),
+    tags,
+    translationUrl: translation ? absolute(href(other, `posts/${slug}`)) : undefined,
+  }),
+  breadcrumbLd([
+    { name: t.home, url: absolute(href(lang)) },
+    { name: t.allPosts, url: absolute(href(lang, 'posts')) },
+    { name: title, url },
+  ]),
+);
 ---
 
 <BaseLayout
@@ -43,6 +65,7 @@ const alternates = {
   nav="posts"
   ogImage={thumbnail?.src}
   article={{ published: date, modified: updated, tags }}
+  jsonLd={jsonLd}
 >
   <div class="post-grid">
     <article class="post" data-pagefind-body>

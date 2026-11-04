@@ -1,7 +1,8 @@
 ---
 import { getEntry, render } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { href, ui } from '../lib/i18n';
+import { absolute, href, ui } from '../lib/i18n';
+import { graph, personLd, profilePageLd } from '../lib/structured-data';
 import { SITE, type Lang } from '../site.config';
 
 interface Props {
@@ -13,6 +14,8 @@ const t = ui(lang);
 const entry = await getEntry('pages', `about.${lang}`);
 if (!entry) throw new Error(`Missing src/content/pages/about.${lang}.md`);
 const { Content } = await render(entry);
+const aboutUrl = absolute(href(lang, 'about'));
+const jsonLd = graph(profilePageLd({ url: aboutUrl, lang, name: entry.data.title }), personLd(aboutUrl));
 ---
 
 <BaseLayout
@@ -21,6 +24,7 @@ const { Content } = await render(entry);
   description={entry.data.description}
   nav="about"
   alternates={{ ko: href('ko', 'about'), en: href('en', 'about') }}
+  jsonLd={jsonLd}
 >
   <div class="wrap about">
     <h1 class="page-title">{entry.data.title}</h1>

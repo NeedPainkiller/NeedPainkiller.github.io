@@ -11,6 +11,7 @@ import Header, { type NavKey } from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import SearchDialog from '../components/SearchDialog.astro';
 import { absolute, asset, href, ui } from '../lib/i18n';
+import { serializeLd } from '../lib/structured-data';
 import { otherLang } from '../lib/text';
 import { SITE, type Lang } from '../site.config';
 
@@ -28,9 +29,22 @@ interface Props {
   /** Standalone documents (the résumé) render without the site header, footer and search. */
   bare?: boolean;
   noindex?: boolean;
+  /** schema.org JSON-LD graph for this page (see src/lib/structured-data.ts). */
+  jsonLd?: Record<string, unknown>;
 }
 
-const { lang, title, description, alternates = {}, nav, ogImage, article, bare = false, noindex = false } = Astro.props;
+const {
+  lang,
+  title,
+  description,
+  alternates = {},
+  nav,
+  ogImage,
+  article,
+  bare = false,
+  noindex = false,
+  jsonLd,
+} = Astro.props;
 const t = ui(lang);
 const fullTitle = title ? `${title} · ${SITE.name}` : SITE.name;
 const desc = description ?? SITE.description[lang];
@@ -71,6 +85,7 @@ const xDefault = alternates.ko ?? alternates.en;
     {article?.modified && <meta property="article:modified_time" content={article.modified.toISOString()} />}
     {article?.tags?.map((tag) => <meta property="article:tag" content={tag} />)}
     <meta name="generator" content={Astro.generator} />
+    {jsonLd && <script is:inline type="application/ld+json" set:html={serializeLd(jsonLd)} />}
 
     <script is:inline>
       (function () {

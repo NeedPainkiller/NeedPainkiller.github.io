@@ -48,7 +48,7 @@ The writing of one engineer working across the whole stack (backend/server, fron
 
 - **Bilingual content:** Korean and English are both first-class. Korean lives at the site root, English under `/en/`. A post is one folder (`src/content/posts/<slug>/`) holding `ko.md`, `en.md` or both; a translation is the sibling file and shares the slug. Each language can exist alone.
 - **Topics:** four fixed areas — backend, frontend, infra, ai — plus free-form tags.
-- **v1 features (confirmed):** full-text search on ⌘K (static index), giscus comments (stored in GitHub Discussions, mapped per page path), dark mode with a toggle, Timeline page, table of contents, code blocks with line numbers/filename/copy, tags, footnotes, related posts, reading time, per-language RSS, sitemap.
+- **v1 features (confirmed):** full-text search on ⌘K (static index), giscus comments (stored in GitHub Discussions, mapped per page path), dark mode with a toggle, Timeline page, table of contents, code blocks with line numbers/filename/copy, tags, footnotes, related posts, reading time, per-language RSS, sitemap, schema.org JSON-LD (BlogPosting, BreadcrumbList, WebSite, Person, ProfilePage), and `llms.txt` / `llms-full.txt` for AI answer engines.
 - **About and Resume:** About is prose-first Markdown. Resume is structured data per language rendered as a standalone page with a print stylesheet; sections without data are hidden.
 - **Terminology:** "post" is a single article. "Projects" and "resume" are the career-visibility material.
 
