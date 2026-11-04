@@ -15,6 +15,9 @@ test-results/
 playwright-report/
 coverage/
 
+# site audit reports and score history (npm run audit)
+reports/
+
 # Impeccable local artefacts (the surface brief and design.json stay tracked)
 .impeccable/config.local.json
 .impeccable/mocks/

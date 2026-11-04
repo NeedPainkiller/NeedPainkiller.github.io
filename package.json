@@ -14,7 +14,9 @@
     "check": "astro check",
     "test": "vitest run",
     "test:e2e": "playwright test",
-    "new-post": "node scripts/new-post.mjs"
+    "new-post": "node scripts/new-post.mjs",
+    "audit": "node scripts/site-audit.mjs",
+    "audit:local": "node scripts/site-audit.mjs --serve"
   },
   "dependencies": {
     "@astrojs/mdx": "^8.1.2",

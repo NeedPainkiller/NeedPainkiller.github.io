@@ -20,6 +20,7 @@ src/content/posts/<slug>/
 
 2. `npm run dev`로 띄우고 `http://localhost:4321/`에서 확인합니다. dev에서는 `draft: true` 글도 보입니다.
 3. 다 쓰면 `draft: false`로 바꾸고 커밋 → `main`에 push. 몇 분 뒤 배포됩니다.
+4. 배포가 끝나면 `npm run audit -- --pages /posts/<slug>/`로 새 글의 SEO·Lighthouse를 확인합니다. 결과 읽는 법은 `.claude/skills/site-audit/SKILL.md`.
 
 ## frontmatter
 

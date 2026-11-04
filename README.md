@@ -15,6 +15,10 @@ NeedPainkiller의 한/영 개발 블로그. Astro로 만든 정적 사이트이�
 | `npm test` | 단위 테스트 |
 | `npm run build` | 배포용 빌드 (`dist/`) + 검색 색인 |
 | `npm run test:e2e` | 빌드 결과에 대한 브라우저 테스트 (아래 참고) |
+| `npm run audit` | 실제 사이트 SEO/GEO 점검 + Lighthouse (모바일·데스크톱), 보고서는 `reports/` |
+| `npm run audit:local` | `dist/`를 직접 띄워 같은 점검 (먼저 `npm run build`) |
+
+점검 항목, 결과 읽는 법, 원인별 수정 위치는 [`.claude/skills/site-audit/SKILL.md`](.claude/skills/site-audit/SKILL.md)에 있습니다. Claude Code에서는 "사이트 점검해 줘"나 `/site-audit`로 불러 쓸 수 있습니다.
 
 브라우저 테스트는 draft 픽스처를 포함한 빌드가 필요합니다.
 
